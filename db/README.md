@@ -49,4 +49,3 @@ bash flyway.sh development
 cd db
 ```
 - All new changes to the database schema should be detailed in a new version script in the /migrations folder. New script filenames should start with V[number of migration]__. For example, see migrations/V1__Setup_users_table.sql. More information on file naming conventions in flyway, see [https://flywaydb.org/documentation/migrations#naming]()
-
