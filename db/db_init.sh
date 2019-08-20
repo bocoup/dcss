@@ -1,0 +1,14 @@
+#!/bin/bash
+USER='tm'
+PASSWORD='teachermoments'
+DATABASE='teachermoments'
+export ROOTUSER=$USER
+
+ psql -c "CREATE DATABASE $DATABASE"
+ psql -c "CREATE ROLE $USER WITH PASSWORD '$PASSWORD'"
+ psql -c "ALTER ROLE $USER WITH LOGIN"
+ psql -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE to $USER"
+
+ export PGUSER=$USER
+ export PGPASSWORD=$PASSWORD
+ export PGDATABASE=$DATABASE
