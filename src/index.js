@@ -3,11 +3,16 @@ const express = require('express');
 const app = express();
 const session = require('express-session')
 const port = process.env.SERVER_PORT || 5000;
+const { Pool } = require('pg');
+
+const pgSession = require('connect-pg-simple')(session);
+const pool = new Pool();
 
 app.use(session({
     secret: 'mit tsl teacher moments',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new pgSession({pool})
 }));
 
 app.post('/login', (req, res) => {
