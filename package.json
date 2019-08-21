@@ -7,6 +7,7 @@
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode development",
     "lint": "eslint src/**/*.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db-create-role-dev": "psql -c \"CREATE ROLE tm WITH PASSWORD 'teachermoments'\"; psql -c \"ALTER ROLE tm WITH LOGIN\"",
     "db-create-dev": "db-migrate --env init db:create teachermoments",
@@ -33,6 +34,7 @@
     "eslint": "^6.2.1",
     "eslint-plugin-react": "^7.14.3",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-hot-loader": "^4.12.11",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "db-migrate": "^0.11.6",
-    "db-migrate-pg": "^1.0.0"
+    "db-migrate-pg": "^1.0.0",
+    "nodemon": "^1.19.1"
   }
 }
