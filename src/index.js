@@ -7,13 +7,6 @@ const port = process.env.SERVER_PORT || 5000;
 const { Pool } = require('pg');
 
 const pgSession = require('connect-pg-simple')(session);
-const pool = new Pool({
-    host: 'localhost',
-    user: 'tm',
-    password: 'teachermoments',
-    database: 'teachermoments',
-    port: 5432
-});
 
 app.use(cors());
 
@@ -21,7 +14,12 @@ app.use(session({
     secret: 'mit tsl teacher moments',
     resave: true,
     saveUninitialized: true,
-    store: new pgSession({pool})
+    store: new pgSession({
+        pool: new Pool(),
+        tableName: 'session'
+    }),
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
+    secret: 'tsl cookie secret'
 }));
 
 app.post('/login', cors() , (req, res) => {

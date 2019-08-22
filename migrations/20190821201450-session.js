@@ -15,11 +15,18 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('session', {
-    sid: { type: 'varchar', notNull: true, collate: "default"},
-    sess: { type: 'json', notNull: true },
-    expire: { type: 'timestamp', length: 6, notNull: true }
-  });
+  // This is from https://github.com/voxpelli/node-connect-pg-simple/blob/HEAD/table.sql
+  // It is a requirement to use the Postgres store
+  return db.runSql(
+    `CREATE TABLE "session" (
+      "sid" varchar NOT NULL COLLATE "default",
+      "sess" json NOT NULL,
+      "expire" timestamp(6) NOT NULL
+    )
+    WITH (OIDS=FALSE);
+    ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+    `
+  )
 }
 
 exports.down = function(db) {
