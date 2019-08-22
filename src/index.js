@@ -1,18 +1,17 @@
 const express = require('express');
-
-const app = express();
 const cors = require('cors');
 const session = require('express-session');
-const port = process.env.SERVER_PORT || 5000;
 const { Pool } = require('pg');
 
+const app = express();
+const port = process.env.SERVER_PORT || 5000;
 const pgSession = require('connect-pg-simple')(session);
 
 app.use(cors());
 
 app.use(session({
     secret: 'mit tsl teacher moments',
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     store: new pgSession({
         pool: new Pool(),
@@ -34,7 +33,7 @@ app.get('/me', (req, res) => {
 
 app.post('/logout', (req, res) => {
     delete req.session.username;
-    res.send('ok');
+    req.session.destroy(() => res.send('ok'));
 });
 
 app.listen(port, () => {
