@@ -46,7 +46,7 @@ app.get('/media/:key', (req, res) => {
         Key: req.params.key
     };
     s3.getObject(params, (err, data) => {
-        if (data.ContentType === 'binary/octet-stream') {
+        if (data && data.ContentType === 'binary/octet-stream') {
             res.send(data.Body.toString());
         } else {
             res.send('ok');
