@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const { Pool } = require('pg');
+const AWS = require('aws-sdk');
+
+require('dotenv').config();
 
 const app = express();
 const port = process.env.SERVER_PORT || 5000;
@@ -34,6 +37,21 @@ app.get('/me', (req, res) => {
 app.post('/logout', (req, res) => {
     delete req.session.username;
     req.session.destroy(() => res.send('ok'));
+});
+
+app.get('/media/:key', (req, res) => {
+    const s3 = new AWS.S3();
+    const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: req.params.key
+    };
+    s3.getObject(params, (err, data) => {
+        if (data.ContentType === 'binary/octet-stream') {
+            res.send(data.Body.toString());
+        } else {
+            res.send('ok');
+        }
+    });
 });
 
 app.listen(port, () => {

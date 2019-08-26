@@ -2,6 +2,19 @@
 
 ## Development
 
+This is the list of all environment variables that should be exported prior to running the Teacher Moments app:
+```
+export PGUSER=
+export PGPASSWORD=
+export PGDATABASE=
+export PGHOST=
+export PGPORT=
+
+# If AWS credentials are stored in profiles
+export AWS_PROFILE=
+export S3_BUCKET=
+```
+
 ### Local Setup
 
 1) Install Dependencies
