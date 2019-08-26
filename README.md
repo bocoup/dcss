@@ -63,3 +63,12 @@ npm run db-migrate-down
 ```
 This command can be customized with the following options [https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#down]()
 
+### S3 Integration
+The AWS bucket used for development is called **v2-moments-dev**. For access, please contact the AWS administrator for TSL.
+
+The app uses for credentials either
+* **default** credential in ~/.aws/credentials *or*
+* set the environment variable **AWS_PROFILE**
+```
+export AWS_PROFILE=tsl
+```
