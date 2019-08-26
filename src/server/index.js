@@ -81,13 +81,7 @@ app.post('/media/:key', async (req, res) => {
         Bucket: process.env.S3_BUCKET,
         Key: req.params.key
     };
-    let body = req.url;
-    await s3.getObject(params, (err, data) => {
-        if (data && (data.ContentType === 'binary/octet-stream' || data.ContentType === 'application/octet-stream')) {
-            body = `${data.Body.toString()}\n ${body}`;
-        }
-    });
-
+    const body = req.url;
     params['Body'] = Buffer.from(body);
     await s3.putObject(params, (err, data) => {
         res.send('ok');
