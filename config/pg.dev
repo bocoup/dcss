@@ -1,5 +1,0 @@
-PGUSER=tm
-PGPASSWORD=teachermoments
-PGDATABASE=teachermoments
-PGHOST=localhost
-PGPORT=5432
