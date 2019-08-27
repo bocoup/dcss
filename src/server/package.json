@@ -15,7 +15,9 @@
     "db-init-local": "yarn db-create-dev && yarn db-create-role-dev && yarn db-migrate-up",
     "create-migration": "db-migrate create",
     "db-migrate-up": "db-migrate up",
-    "db-migrate-down": "db-migrate down"
+    "db-migrate-down": "db-migrate down",
+    "lint": "eslint --ext js . *.js",
+    "prettier": "prettier --write '**/*.js'"
   },
   "homepage": "https://github.com/mit-teaching-systems-lab/threeflows#readme",
   "dependencies": {
@@ -35,9 +37,5 @@
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "nodemon": "^1.19.1"
-  },
-  "scripts": {
-    "lint": "eslint --ext js . *.js",
-    "prettier": "prettier --write '**/*.js'"
   }
 }

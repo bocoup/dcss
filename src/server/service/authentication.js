@@ -5,16 +5,20 @@ const { createUser } = require('../util/authentication_helpers');
 const authRouter = Router();
 
 authRouter.post('/signup', async (req, res) => {
-    if (!req.body) res.status(400).send({error: 'No request body!'});
-    const { username, password, email} = req.body;
+    if (!req.body) res.status(400).send({ error: 'No request body!' });
+    const { username, password, email } = req.body;
 
-    if (!username && !email) res.status(400).send({error: 'Username or email must be defined.'});
+    if (!username && !email)
+        res.status(400).send({ error: 'Username or email must be defined.' });
 
-    if (!email.includes('@')) res.status(400).send({error: 'Email address not in correct format.'})
+    if (!email.includes('@'))
+        res.status(400).send({ error: 'Email address not in correct format.' });
 
     const created = await createUser(email, username, password);
 
-    created ? res.sendStatus(201) : res.status(500).send({ error: "User not created. Server error"});
+    created
+        ? res.sendStatus(201)
+        : res.status(500).send({ error: 'User not created. Server error' });
 });
 
 /**
@@ -22,9 +26,9 @@ authRouter.post('/signup', async (req, res) => {
  *  When a user hits this endpoint, the user 'boo'
  *  becomes the active session user.
  */
-authRouter.post('/login', cors() , (req, res) => {
+authRouter.post('/login', cors(), (req, res) => {
     req.session.username = 'boo';
-    res.send({ ok: true, username: req.session.username});
+    res.send({ ok: true, username: req.session.username });
 });
 
 /**
@@ -39,7 +43,7 @@ authRouter.post('/logout', (req, res) => {
 
 authRouter.get('/me', (req, res) => {
     if (!req.session.username) res.send('Not logged in!');
-    res.send({username: req.session.username});
+    res.send({ username: req.session.username });
 });
 
 module.exports = authRouter;
