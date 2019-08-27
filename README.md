@@ -2,7 +2,11 @@
 
 ## Development
 
+<<<<<<< HEAD
 This is the list of all environment variables that should be exported prior to running the Teacher Moments app in the command line:
+=======
+This is the list of all environment variables that should be exported prior to running the Teacher Moments app:
+>>>>>>> 7269bad0a9e1fa6783f06f96716b028244a1cc7c
 ```
 export PGUSER=
 export PGPASSWORD=
