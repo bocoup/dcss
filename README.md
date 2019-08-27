@@ -80,8 +80,13 @@ This command can be customized with the following options [https://db-migrate.re
 The AWS bucket used for development is called **v2-moments-dev**. For access, please contact the AWS administrator for TSL.
 
 The app uses for credentials either
-* **default** credential in ~/.aws/credentials *or*
-* set the environment variable **AWS_PROFILE**
+* **default** credential in your home directory at ~/.aws/credentials with this file format:
+```
+[default] #TSL
+aws_access_key_id = <your access key id>
+aws_secret_access_key = <your secret access key id>
+```
+* *or* set the environment variable **AWS_PROFILE**
 ```
 export AWS_PROFILE=tsl
 ```
