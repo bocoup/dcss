@@ -1,7 +1,10 @@
 'use strict';
 
 var dbm;
+// disabiling eslint because db-migrate template default
+// eslint-disable-next-line no-unused-vars
 var type;
+// eslint-disable-next-line no-unused-vars
 var seed;
 
 /**

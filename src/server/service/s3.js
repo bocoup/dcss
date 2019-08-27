@@ -39,6 +39,9 @@ s3Router.post('/:key', async (req, res, next) => {
     let params = { ...s3Params, Key: req.params.key };
     const body = req.originalUrl;
     params['Body'] = Buffer.from(body);
+
+    // disabling lint because data might be used in the future
+    // eslint-disable-next-line no-unused-vars
     await s3.putObject(params, (err, data) => {
         // pass the error to Express if there is one
         if (err) next(err);
