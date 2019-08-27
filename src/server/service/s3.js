@@ -10,6 +10,12 @@ const s3Params = {
 
 const s3Router = Router();
 
+/**
+ *  This is a stubbed endpoint in which the user can
+ *  request a given file key, and the endpoint returns
+ *  the content if it is a string and 'ok' if it doesn't
+ *  exist.
+ */
 s3Router.get('/:key', (req, res) => {
     const params = { ...s3Params, Key: req.params.key};
     s3.getObject(params, (err, data) => {
@@ -26,11 +32,13 @@ s3Router.get('/:key', (req, res) => {
  *  send a POST request for a given file key, and the
  *  endpoint writes the URL to a text file in s3.
  */
-s3Router.post('/:key', async (req, res) => {
+s3Router.post('/:key', async (req, res, next) => {
     let params = { ...s3Params, Key: req.params.key};
-    const body = req.url;
+    const body = req.originalUrl;
     params['Body'] = Buffer.from(body);
     await s3.putObject(params, (err, data) => {
+        // pass the error to Express if there is one
+        if (err) next(err);
         res.send('ok');
     });
 });
