@@ -14,17 +14,18 @@ const pgSession = require('connect-pg-simple')(session);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(session({
-    secret: 'mit tsl teacher moments',
-    resave: false,
-    saveUninitialized: true,
-    store: new pgSession({
-        pool: new Pool(),
-        tableName: 'session'
-    }),
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
-    secret: 'tsl cookie secret'
-}));
+app.use(
+    session({
+        secret: 'mit tsl teacher moments',
+        resave: false,
+        saveUninitialized: true,
+        store: new pgSession({
+            pool: new Pool(),
+            tableName: 'session'
+        }),
+        cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+    })
+);
 
 app.use(authRouter);
 app.use('/media', s3Router);
