@@ -20,18 +20,22 @@ exports.up = function(db) {
     ADD COLUMN id SERIAL PRIMARY KEY,
     ADD COLUMN email TEXT,
     ADD COLUMN username TEXT,
-    ADD COLUMN password_hash TEXT;
+    ADD COLUMN hash TEXT,
+    ADD COLUMN salt TEXT;
     `
   )
 };
 
 exports.down = function(db) {
   return db.runSql(
-    `ALTER TABLE users
+    `DELETE FROM users
+    RETURNING *;
+    ALTER TABLE users
     DROP COLUMN id,
     DROP COLUMN email,
     DROP COLUMN username,
-    DROP COLUMN password_hash;
+    DROP COLUMN hash,
+    DROP COLUMN salt;
     `
   );
 };
