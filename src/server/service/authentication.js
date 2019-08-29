@@ -11,7 +11,7 @@ authRouter.post('/signup', getUser, async (req, res) => {
     if (!username && !email)
         res.status(400).send({ error: 'Username or email must be defined.' });
 
-    if (!email.includes('@'))
+    if (email && !email.includes('@'))
         res.status(400).send({ error: 'Email address not in correct format.' });
 
     const created = await createUser(email, username, password);
