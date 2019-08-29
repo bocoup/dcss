@@ -1,9 +1,9 @@
 const { Pool } = require('pg');
-const { saltHashPassword } = require('./pw_hash');
+const { saltHashPassword, validateHashPassword } = require('./pw_hash');
 
 const pool = new Pool();
 
-const getUser = async function(username, email) {
+const getUserInDatabase = async function(username, email) {
     const client = await pool.connect();
     let rows;
 
@@ -33,14 +33,36 @@ const getUser = async function(username, email) {
     return rows;
 }
 
-const userExists = async function(username, email) {
-    const rows = await getUser(username, email);
-    return rows.length > 0;
+const userExistsInDatabase = async function(username, email) {
+    const rows = await getUserInDatabase(username, email);
+    let user, exists = rows.length > 0;
+    if (exists) {
+        user = rows[0];
+        if (username) exists = exists && user.username === username;
+        if (email) exists = exists && user.email === email;
+    }
+        
+    return { exists, user };
+}
+
+const loginUser = async function(req, res, next) {
+    const { username, email, password } = req.body;
+    const { exists, user } = await userExistsInDatabase(username, email);
+    if (exists) {
+        const { hash, salt } = user;
+        const { passwordHash } = validateHashPassword(password, salt);
+        req.passwordMatch = hash === passwordHash;
+        next();
+        return;
+    }
+
+    res.status(404).send({ error: 'User not found.'});
+    return;
 }
 
 const duplicatedUser = async function(req, res, next) {
     const { username, email } = req.body;
-    const exists = await userExists(username, email);
+    const { exists } = await userExistsInDatabase(username, email);
     if(exists) {
         res.status(409).send({ error: 'Duplicated user. User already exists!' });
         return;
@@ -78,4 +100,4 @@ const createUser = async function(email, username, password) {
     }
 };
 
-module.exports = { createUser, duplicatedUser };
+module.exports = { createUser, duplicatedUser, loginUser };
