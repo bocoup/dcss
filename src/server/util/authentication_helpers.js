@@ -3,8 +3,7 @@ const { saltHashPassword } = require('./pw_hash');
 
 const pool = new Pool();
 
-const getUser = async function(req, res, next) {
-    const { username, email } = req.body;
+const getUser = async function(username, email) {
     const client = await pool.connect();
     let rows;
 
@@ -31,7 +30,18 @@ const getUser = async function(req, res, next) {
         rows = result.rows;
     }
 
-    if(rows.length > 0) {
+    return rows;
+}
+
+const userExists = async function(username, email) {
+    const rows = await getUser(username, email);
+    return rows.length > 0;
+}
+
+const duplicatedUser = async function(req, res, next) {
+    const { username, email } = req.body;
+    const exists = await userExists(username, email);
+    if(exists) {
         res.status(409).send({ error: 'Duplicated user. User already exists!' });
         return;
     }
@@ -68,4 +78,4 @@ const createUser = async function(email, username, password) {
     }
 };
 
-module.exports = { createUser, getUser };
+module.exports = { createUser, duplicatedUser };

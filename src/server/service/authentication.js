@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const cors = require('cors');
-const { createUser, getUser } = require('../util/authentication_helpers');
+const { createUser, duplicatedUser } = require('../util/authentication_helpers');
 
 const authRouter = Router();
 
-authRouter.post('/signup', getUser, async (req, res) => {
+authRouter.post('/signup', duplicatedUser, async (req, res) => {
     if (!req.body) res.status(400).send({ error: 'No request body!' });
     const { username, password, email } = req.body;
 
@@ -26,7 +26,7 @@ authRouter.post('/signup', getUser, async (req, res) => {
  *  When a user hits this endpoint, the user 'boo'
  *  becomes the active session user.
  */
-authRouter.post('/login', cors(), (req, res) => {
+authRouter.post('/login', [cors()], (req, res) => {
     req.session.username = 'boo';
     res.send({ ok: true, username: req.session.username });
 });
