@@ -47,6 +47,8 @@ authRouter.post('/login', [cors(), validateRequestUsernameAndEmail, loginUser], 
  *  is no longer the active session user.
  */
 authRouter.post('/logout', (req, res) => {
+    delete req.session.anonymous;
+    delete req.session.email;
     delete req.session.username;
     req.session.destroy(() => res.send('ok'));
 });
@@ -58,7 +60,10 @@ authRouter.get('/me', (req, res) => {
     if (req.session.email) meObj['email'] = req.session.email;
     if (req.session.anonymous) meObj['anonymous'] = req.session.anonymous;
 
-    if (!meObj) res.send('Not logged in!');
+    if (Object.keys(meObj).length === 0) {
+        res.send('Not logged in!');
+        return;
+    }
 
     res.send(meObj);
 });
