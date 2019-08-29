@@ -9,6 +9,7 @@ const getUser = async function(req, res, next) {
     const client = await pool.connect();
 
     const result = await client.query(sql`SELECT * FROM users WHERE email = ${email} OR username = ${username};`);
+    client.end();
 
     if(result.rows.length > 0) {
         res.status(409).send({ error: 'Duplicated user. User already exists!' });

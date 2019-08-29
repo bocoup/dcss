@@ -1,5 +1,4 @@
 function sql(textParts, ...values) {  
-    console.log(textParts, values)
     const text = textParts.reduce((memo, string, index) => { 
       if (index == 0) return string;
       return memo + '$' + index + string;
