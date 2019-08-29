@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const AWS = require('aws-sdk');
+const util = require('util');
 require('dotenv').config();
 
 
@@ -36,11 +37,12 @@ s3Router.post('/:key', async (req, res, next) => {
     let params = { ...s3Params, Key: req.params.key};
     const body = req.originalUrl;
     params['Body'] = Buffer.from(body);
-    await s3.putObject(params, (err, data) => {
-        // pass the error to Express if there is one
-        if (err) next(err);
+    try {
+        await util.promisify(s3.putObject).call(s3,params);
         res.send('ok');
-    });
+    } catch (err) {
+        next(err);
+    };
 });
     
 
