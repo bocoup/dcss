@@ -3,6 +3,24 @@ const { saltHashPassword } = require('./pw_hash');
 
 const pool = new Pool();
 
+const getUser = async function(req, res, next) {
+    const { username, email } = req.body;
+    let identifier, queryColumn;
+    if (email) {
+        [ identifier, queryColumn ] = [ email, 'email'];
+    } else {
+        [ identifier, queryColumn ] = [ username, 'username'];
+    }
+
+    const queryText = `SELECT * FROM users WHERE ${queryColumn} = '${identifier}';`;
+    const client = await pool.connect();
+    const result = await client.query(queryText);
+
+    if(result.rows.length > 0) res.status(409).send({ error: 'Duplicated user. User already exists!' });
+
+    next();
+}
+
 const createUser = async function(email, username, password) {
     let pw_salt, pw_hash;
     if (password) {
@@ -28,8 +46,8 @@ const createUser = async function(email, username, password) {
     } catch (e) {
         await client.query('ROLLBACK');
     } finally {
-        client.release();
+        client.end();
     }
 };
 
-module.exports = { createUser };
+module.exports = { createUser, getUser };

@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const cors = require('cors');
-const { createUser } = require('../util/authentication_helpers');
+const { createUser, getUser } = require('../util/authentication_helpers');
 
 const authRouter = Router();
 
-authRouter.post('/signup', async (req, res) => {
+authRouter.post('/signup', getUser, async (req, res) => {
     if (!req.body) res.status(400).send({ error: 'No request body!' });
     const { username, password, email } = req.body;
 
