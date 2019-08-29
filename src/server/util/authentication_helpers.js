@@ -20,25 +20,17 @@ const getUser = async function(req, res, next) {
 }
 
 const createUser = async function(email, username, password) {
-    let pw_salt, pw_hash;
-    if (password) {
-        const { salt, passwordHash } = saltHashPassword(password);
-        pw_salt = salt;
-        pw_hash = passwordHash;
-    }
-
-    const client = await pool.connect();
+     const client = await pool.connect();
     try {
+        let salt, passwordHash;
+        if (password) {
+            let passwordObj = saltHashPassword(password);
+            salt = passwordObj.salt;
+            passwordHash = passwordObj.passwordHash;
+        }
         await client.query('BEGIN');
-        const queryText = `INSERT INTO users(email, username, hash, salt)
-        VALUES($1, $2, $3, $4);
-        `;
-        await client.query(queryText, [
-            !email ? null : email,
-            !username ? null : username,
-            !pw_hash ? null : pw_hash,
-            !pw_salt ? null : pw_salt
-        ]);
+        await client.query(sql`INSERT INTO users(email, username, hash, salt)
+            VALUES(${email}, ${username}, ${passwordHash}, ${salt});`);
         await client.query('COMMIT');
         return true;
     } catch (e) {
