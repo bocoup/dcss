@@ -47,10 +47,12 @@ const userExistsInDatabase = async function(username, email) {
 
 const loginUser = async function(req, res, next) {
     const { username, email, password } = req.body;
-    const { exists, user: { salt, hash } } = await userExistsInDatabase(username, email);
+    const { exists, user } = await userExistsInDatabase(username, email);
 
     // Case when user is found
     if (exists) {
+        const { salt, hash } = user;
+        
         // Case of anonymous user, where only the username / email stored
         if (!password && !hash && !salt) {
             req.anonymous = true;
