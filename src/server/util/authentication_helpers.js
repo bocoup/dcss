@@ -9,7 +9,7 @@ const getUser = async function(req, res, next) {
     const client = await pool.connect();
 
     const result = await client.query(sql`SELECT * FROM users WHERE email = ${email} OR username = ${username};`);
-    client.end();
+    await client.end();
 
     if(result.rows.length > 0) {
         res.status(409).send({ error: 'Duplicated user. User already exists!' });
@@ -32,6 +32,7 @@ const createUser = async function(email, username, password) {
         await client.query(sql`INSERT INTO users(email, username, hash, salt)
             VALUES(${email}, ${username}, ${passwordHash}, ${salt});`);
         await client.query('COMMIT');
+        await client.end();
         return true;
     } catch (e) {
         await client.query('ROLLBACK');
