@@ -1,19 +1,11 @@
 const { Router } = require('express');
 const cors = require('cors');
 const { createUser, duplicatedUser, loginUser } = require('../util/authentication_helpers');
+const { validateRequestUsernameAndEmail, validateRequestBody } = require('../util/request_validation');
 
 const authRouter = Router();
 
-authRouter.post('/signup', duplicatedUser, async (req, res) => {
-    if (!req.body) res.status(400).send({ error: 'No request body!' });
-    const { username, password, email } = req.body;
-
-    if (!username && !email)
-        res.status(400).send({ error: 'Username or email must be defined.' });
-
-    if (email && !email.includes('@'))
-        res.status(400).send({ error: 'Email address not in correct format.' });
-
+authRouter.post('/signup', [validateRequestUsernameAndEmail, validateRequestBody, duplicatedUser], async (req, res) => {
     const created = await createUser(email, username, password);
 
     created
@@ -21,14 +13,9 @@ authRouter.post('/signup', duplicatedUser, async (req, res) => {
         : res.status(500).send({ error: 'User not created. Server error' });
 });
 
-/**
- *  This is a stubbed endpoint for logging in.
- *  When a user hits this endpoint, the user 'boo'
- *  becomes the active session user.
- */
-authRouter.post('/login', [cors(), loginUser], (req, res) => {
+authRouter.post('/login', [cors(), validateRequestUsernameAndEmail, loginUser], (req, res) => {
     const { username, email } = req.body;
-    const { passwordMatch } = req;
+    const { passwordMatch, anonymous } = req;
 
     let userObj = {};
 
@@ -42,6 +29,12 @@ authRouter.post('/login', [cors(), loginUser], (req, res) => {
             userObj['email'] = email;
         }
     }
+
+    if (anonymous) {
+        req.session.anonymous = true;
+        userObj['anonymous'] = true;
+    }
+
     res.send(userObj);
 });
 

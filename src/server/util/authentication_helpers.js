@@ -47,13 +47,36 @@ const userExistsInDatabase = async function(username, email) {
 
 const loginUser = async function(req, res, next) {
     const { username, email, password } = req.body;
-    const { exists, user } = await userExistsInDatabase(username, email);
+    const { exists, user: { salt, hash } } = await userExistsInDatabase(username, email);
+
+    // Case when user is found
     if (exists) {
-        const { hash, salt } = user;
-        const { passwordHash } = validateHashPassword(password, salt);
-        req.passwordMatch = hash === passwordHash;
-        next();
-        return;
+        // Case of anonymous user, where only the username / email stored
+        if (!password && !hash && !salt) {
+            req.anonymous = true;
+            next();
+            return;
+        }
+
+        // Case when a passwordless user passes a password
+        else if (password && !hash && !salt) {
+            res.status(400).send({ error: 'Anonymous user supplied.' });
+            return;
+        }
+
+        // Case when a user with a password is supplied without a password
+        else if (!password && hash && salt) {
+            res.status(400).send({ error: 'Username / email supplied requires a password'});
+            return;
+
+        }
+        // Case when user with is a password is supplied with a password
+        else {
+            const { passwordHash } = validateHashPassword(password, salt);
+            req.passwordMatch = hash === passwordHash;
+            next();
+            return;
+        }
     }
 
     res.status(404).send({ error: 'User not found.'});
@@ -98,6 +121,6 @@ const createUser = async function(email, username, password) {
     } finally {
         client.end();
     }
-};
+}
 
 module.exports = { createUser, duplicatedUser, loginUser };
