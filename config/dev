@@ -3,9 +3,6 @@ PGPASSWORD=teachermoments
 PGDATABASE=teachermoments
 PGHOST=localhost
 PGPORT=5432
-<<<<<<< HEAD:config/dev
 
 AWS_PROFILE=tsl
 S3_BUCKET=v2-moments-dev
-=======
->>>>>>> b0bbec157de55958dfa0902bdf5aa3242e10c883:config/pg.dev
