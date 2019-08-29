@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const { sql } = require('./sql_helpers');
 const { saltHashPassword } = require('./pw_hash');
 
 const pool = new Pool();
@@ -6,32 +7,10 @@ const pool = new Pool();
 const getUser = async function(req, res, next) {
     const { username, email } = req.body;
     const client = await pool.connect();
-    let rows;
 
-    // In this case, check email and username separately since the
-    //  user may have already signed up with either or both
-    if (email && username) {
-        const emailQuery = `SELECT * FROM users WHERE email = '${email}';`;
-        const emailResult = await client.query(emailQuery);
-        const usernameQuery = `SELECT * FROM users WHERE username = '${username}';`;
-        const usernameResult = await client.query(usernameQuery);
+    const result = await client.query(sql`SELECT * FROM users WHERE email = ${email} OR username = ${username};`);
 
-        rows = [...emailResult.rows, ...usernameResult.rows];
-
-    // Handle the case when only email or username supplied
-    } else {
-        if (email && !username) {
-            condition = `email = '${email}'`;
-        }
-        if (!email && username) {
-            condition = `username = '${username}'`;
-        }
-        const queryText = `SELECT * FROM users WHERE ${condition};`;
-        const result = await client.query(queryText);
-        rows = result.rows;
-    }
-
-    if(rows.length > 0) {
+    if(result.rows.length > 0) {
         res.status(409).send({ error: 'Duplicated user. User already exists!' });
         return;
     }
