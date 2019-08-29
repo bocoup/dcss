@@ -14,7 +14,11 @@
     "build": "webpack --mode development",
     "dev": "nodemon ./src/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "storybook": "yarn workspaces run storybook"
+    "storybook": "yarn workspaces run storybook",
+    "db-init-local": "yarn workspace server db-init-local",
+    "db-migrate-up": "yarn workspace server db-migrate-up",
+    "db-migrate-down": "yarn workspace server db-migrate-down",
+    "create-migration": "yarn workspace server create-migration"
   },
   "repository": {
     "type": "git",
