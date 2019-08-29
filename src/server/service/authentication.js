@@ -20,6 +20,7 @@ authRouter.post('/login', [cors(), validateRequestUsernameAndEmail, loginUser], 
     let userObj = {};
 
     if (passwordMatch) {
+        req.session.anonymous = false;
         if (username) {
             req.session.username = username;
             userObj['username'] = username;
@@ -32,6 +33,8 @@ authRouter.post('/login', [cors(), validateRequestUsernameAndEmail, loginUser], 
 
     if (anonymous) {
         req.session.anonymous = true;
+        req.session.username = '';
+        req.session.email = '';
         userObj['anonymous'] = true;
     }
 
@@ -49,8 +52,15 @@ authRouter.post('/logout', (req, res) => {
 });
 
 authRouter.get('/me', (req, res) => {
-    if (!req.session.username) res.send('Not logged in!');
-    res.send({ username: req.session.username });
+    let meObj = {}
+
+    if (req.session.username) meObj['username'] = req.session.username;
+    if (req.session.email) meObj['email'] = req.session.email;
+    if (req.session.anonymous) meObj['anonymous'] = req.session.anonymous;
+
+    if (!meObj) res.send('Not logged in!');
+
+    res.send(meObj);
 });
 
 module.exports = authRouter;
