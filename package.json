@@ -6,7 +6,8 @@
   "private": true,
   "workspaces": [
     "src/client",
-    "src/server"
+    "src/server",
+    "test"
   ],
   "scripts": {
     "start": "webpack-dev-server --mode development",
