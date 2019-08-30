@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const cors = require('cors');
 const { createUser, duplicatedUser, loginUser } = require('../util/authenticationHelpers');
-const { validateRequestUsernameAndEmail, validateRequestBody } = require('../util/request_validation');
+const { validateRequestUsernameAndEmail, validateRequestBody } = require('../util/requestValidation');
 
 const authRouter = Router();
 
