@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const cors = require('cors');
-const { createUser, duplicatedUser, loginUser } = require('../util/authentication_helpers');
+const { createUser, duplicatedUser, loginUser } = require('../util/authenticationHelpers');
 const { validateRequestUsernameAndEmail, validateRequestBody } = require('../util/request_validation');
 
 const authRouter = Router();
@@ -8,7 +8,7 @@ const authRouter = Router();
 authRouter.post('/signup', [validateRequestUsernameAndEmail, validateRequestBody, duplicatedUser], async (req, res) => {
     const created = await createUser(email, username, password);
 
-    created
+    return created
         ? res.sendStatus(201)
         : res.status(500).send({ error: 'User not created. Server error' });
 });
