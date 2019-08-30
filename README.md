@@ -57,18 +57,15 @@ This project uses [Eslint](https://eslint.org/) for linting. To catch syntax and
 - Initialize local database
 
 ```
-cd src/server
 yarn db-init-local
 ```
 
 ### Creating Database Migrations
 
 ```
-cd src/server
 yarn create-migration <migration name>
 
 # Example
-cd src/server
 yarn create-migration create-users-table
 ```
 
@@ -77,7 +74,6 @@ db-migrate tool will subsequently create a JS migration file that can be edited 
 ### Applying Database Migrations
 
 ```
-cd src/server
 yarn db-migrate-up
 ```
 
@@ -89,7 +85,6 @@ Passing a count: `npm run db-migrate-down -- -c 1`
 ### Reverting Database Migrations
 
 ```
-cd src/server
 yarn db-migrate-down
 ```
 
