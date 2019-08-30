@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
-const { sql } = require('./sql_helpers');
-const { saltHashPassword } = require('./pw_hash');
+const { sql } = require('./sqlHelpers');
+const { saltHashPassword } = require('./pwHash');
 
 const pool = new Pool();
 

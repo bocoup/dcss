@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const cors = require('cors');
-const { createUser, getUser } = require('../util/authentication_helpers');
+const { createUser, getUser } = require('../util/authenticationHelpers');
 
 const authRouter = Router();
 
