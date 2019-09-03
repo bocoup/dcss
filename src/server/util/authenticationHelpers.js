@@ -19,8 +19,8 @@ const userExistsInDatabase = async function(username, email) {
         exists = rows.length > 0;
     if (exists) {
         user = rows[0];
-        if (username) exists = exists && user.username === username;
-        if (email) exists = exists && user.email === email;
+        if (username) exists = user.username === username;
+        if (email) exists = user.email === email;
     }
 
     return { exists, user };
