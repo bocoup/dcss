@@ -1,6 +1,8 @@
 const { Pool } = require('pg');
 const { sql } = require('./sqlHelpers');
 const { saltHashPassword, validateHashPassword } = require('./pwHash');
+const { apiError } = require('./api');
+
 
 const pool = new Pool();
 
@@ -43,46 +45,41 @@ const duplicatedUser = async function(req, res, next) {
 const loginUser = async function(req, res, next) {
     const { username, email, password } = req.body;
     const user = await userExistsInDatabase(username, email);
-
+    
     // Case when user is found
     if (user) {
         const { salt, hash } = user;
 
         // Case of anonymous user, where only the username / email stored
         if (!password && !hash && !salt) {
-            // disabling because not using an await or generator
-            // eslint-disable-next-line require-atomic-updates
-            req.anonymous = true;
-            next();
-            return;
+            req.session.user = { anonymous: true, username: '', email: '' };
+            return next();
         }
 
         // Case when a passwordless user passes a password
-        else if (password && !hash && !salt) {
-            res.status(400).send({ error: 'Anonymous user supplied.' });
-            return;
+       if (password && !hash && !salt) {
+            // send JSON API error
+            return apiError(res, new Error('Anonymous user supplied.'))
         }
 
         // Case when a user with a password is supplied without a password
-        else if (!password && hash && salt) {
-            res.status(400).send({
-                error: 'Username / email supplied requires a password'
-            });
-            return;
+        if (!password && hash && salt) {
+            return apiError(res, new Error('Username / email supplied requires a password'));
         }
         // Case when user has a password is supplied with a password
-        else {
-            const { passwordHash } = validateHashPassword(password, salt);
-            // disabling because not using an await or generator
-            // eslint-disable-next-line require-atomic-updates
-            req.passwordMatch = hash === passwordHash;
-            next();
-            return;
+        const { passwordHash } = validateHashPassword(password, salt);
+        // disabling because not using an await or generator
+        // eslint-disable-next-line require-atomic-updates
+        const match = hash === passwordHash;
+        if (match) {
+            req.session.user = { anonymous: false, username: user.username, email: user.email };
+            return next();
         }
     }
 
-    res.status(404).send({ error: 'User not found.' });
-    return;
+    const invalidUserError = new Error('Invalid username or password.');
+    invalidUserError.status = 401;
+    return apiError(res, invalidUserError);;
 };
 
 const createUser = async function(email, username, password) {
@@ -106,4 +103,13 @@ const createUser = async function(email, username, password) {
     }
 };
 
-module.exports = { createUser, duplicatedUser, loginUser };
+const requireUser = (req, res, next) => {
+    if(!req.session.user) {
+        const error = new Error('Not logged in!');
+        error.status = 401;
+        return apiError(res, error);
+    }
+    next();
+}
+
+module.exports = { createUser, duplicatedUser, loginUser, requireUser };

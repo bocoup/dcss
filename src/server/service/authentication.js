@@ -3,7 +3,8 @@ const cors = require('cors');
 const {
     createUser,
     duplicatedUser,
-    loginUser
+    loginUser,
+    requireUser
 } = require('../util/authenticationHelpers');
 const {
     validateRequestUsernameAndEmail,
@@ -29,31 +30,7 @@ authRouter.post(
     '/login',
     [cors(), validateRequestUsernameAndEmail, loginUser],
     (req, res) => {
-        const { username, email } = req.body;
-        const { passwordMatch, anonymous } = req;
-
-        let userObj = {};
-
-        if (passwordMatch) {
-            req.session.anonymous = false;
-            if (username) {
-                req.session.username = username;
-                userObj['username'] = username;
-            }
-            if (email) {
-                req.session.email = email;
-                userObj['email'] = email;
-            }
-        }
-
-        if (anonymous) {
-            req.session.anonymous = true;
-            req.session.username = '';
-            req.session.email = '';
-            userObj['anonymous'] = true;
-        }
-
-        res.send(userObj);
+        res.json(req.session.user);
     }
 );
 
@@ -67,16 +44,8 @@ authRouter.post('/logout', async (req, res) => {
     req.session.destroy(() => res.send('ok'));
 });
 
-authRouter.get('/me', (req, res) => {
-    let meObj = {};
-
-    if (req.session.username) meObj['username'] = req.session.username;
-    if (req.session.email) meObj['email'] = req.session.email;
-    if (req.session.anonymous) meObj['anonymous'] = req.session.anonymous;
-
-    if (Object.keys(meObj) < 1) return res.send('Not logged in!');
-
-    res.send(meObj);
+authRouter.get('/me', requireUser, (req, res) => {
+    return res.json(req.session.user);
 });
 
 module.exports = authRouter;
