@@ -15,8 +15,7 @@ const validateRequestUsernameAndEmail = function(req, res, next) {
 
 const validateRequestBody = function(req, res, next) {
     if (!req.body) {
-        res.status(400).send({ error: 'No request body!' });
-        return;
+        return apiError(res, new Error('No request body!'));
     }
 
     next();

@@ -14,15 +14,15 @@ const {
 const authRouter = Router();
 
 authRouter.post('/signup', [
-    validateRequestUsernameAndEmail,
     validateRequestBody,
+    validateRequestUsernameAndEmail,
     duplicatedUser,
     createUser
 ]);
 
 authRouter.post(
     '/login',
-    [cors(), validateRequestUsernameAndEmail, loginUser],
+    [cors(), validateRequestBody, validateRequestUsernameAndEmail, loginUser],
     (req, res) => {
         res.json(req.session.user);
     }
