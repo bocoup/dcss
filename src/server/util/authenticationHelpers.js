@@ -3,7 +3,6 @@ const { sql } = require('./sqlHelpers');
 const { saltHashPassword, validateHashPassword } = require('./pwHash');
 const { apiError } = require('./api');
 
-
 const pool = new Pool();
 
 const getUserInDatabase = async function(username, email) {
@@ -34,7 +33,7 @@ const duplicatedUser = async function(req, res, next) {
     const user = await userExistsInDatabase(username, email);
     if (user) {
         const duplicatedUserError = new Error('User exists.');
-        duplicatedUserError.status = 409
+        duplicatedUserError.status = 409;
         return apiError(res, duplicatedUserError);
     }
     next();
@@ -43,39 +42,50 @@ const duplicatedUser = async function(req, res, next) {
 const loginUser = async function(req, res, next) {
     const { username, email, password } = req.body;
     const user = await userExistsInDatabase(username, email);
-    
+
     // Case when user is found
     if (user) {
         const { salt, hash } = user;
 
         // Case of anonymous user, where only the username / email stored
         if (!password && !hash && !salt) {
+            // disabling to set req.session.user
+            //eslint-disable-next-line require-atomic-updates
             req.session.user = { anonymous: true, username: '', email: '' };
             return next();
         }
 
         // Case when a passwordless user passes a password
-       if (password && !hash && !salt) {
+        if (password && !hash && !salt) {
             // send JSON API error
-            return apiError(res, new Error('Anonymous user supplied.'))
+            return apiError(res, new Error('Anonymous user supplied.'));
         }
 
         // Case when a user with a password is supplied without a password
         if (!password && hash && salt) {
-            return apiError(res, new Error('Username / email supplied requires a password'));
+            return apiError(
+                res,
+                new Error('Username / email supplied requires a password')
+            );
         }
         // Case when user has a password is supplied with a password
         const { passwordHash } = validateHashPassword(password, salt);
         const match = hash === passwordHash;
         if (match) {
-            req.session.user = { anonymous: false, username: user.username, email: user.email };
+            // disabling to set req.session.user
+            //eslint-disable-next-line require-atomic-updates
+            req.session.user = {
+                anonymous: false,
+                username: user.username,
+                email: user.email
+            };
             return next();
         }
     }
 
     const invalidUserError = new Error('Invalid username or password.');
     invalidUserError.status = 401;
-    return apiError(res, invalidUserError);;
+    return apiError(res, invalidUserError);
 };
 
 const createUser = async function(email, username, password) {
@@ -100,12 +110,12 @@ const createUser = async function(email, username, password) {
 };
 
 const requireUser = (req, res, next) => {
-    if(!req.session.user) {
+    if (!req.session.user) {
         const error = new Error('Not logged in!');
         error.status = 401;
         return apiError(res, error);
     }
     next();
-}
+};
 
 module.exports = { createUser, duplicatedUser, loginUser, requireUser };

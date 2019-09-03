@@ -10,6 +10,7 @@ const {
     validateRequestUsernameAndEmail,
     validateRequestBody
 } = require('../util/requestValidation');
+const { apiError } = require('../util/api');
 
 const authRouter = Router();
 
