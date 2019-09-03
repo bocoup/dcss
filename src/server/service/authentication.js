@@ -6,6 +6,7 @@ const { validateRequestUsernameAndEmail, validateRequestBody } = require('../uti
 const authRouter = Router();
 
 authRouter.post('/signup', [validateRequestUsernameAndEmail, validateRequestBody, duplicatedUser], async (req, res) => {
+    const { username, password, email} = req.body;
     const created = await createUser(email, username, password);
 
     return created
