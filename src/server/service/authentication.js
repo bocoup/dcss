@@ -33,7 +33,7 @@ authRouter.post(
  *  When a user hits this endpoint, the user 'boo'
  *  is no longer the active session user.
  */
-authRouter.post('/logout', async (req, res) => {
+authRouter.post('/logout', (req, res) => {
     delete req.session.username;
     req.session.destroy(() => res.send('ok'));
 });
