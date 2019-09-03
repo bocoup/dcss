@@ -62,7 +62,7 @@ authRouter.post(
  *  When a user hits this endpoint, the user 'boo'
  *  is no longer the active session user.
  */
-authRouter.post('/logout', (req, res) => {
+authRouter.post('/logout', async (req, res) => {
     delete req.session.username;
     req.session.destroy(() => res.send('ok'));
 });
@@ -74,7 +74,7 @@ authRouter.get('/me', (req, res) => {
     if (req.session.email) meObj['email'] = req.session.email;
     if (req.session.anonymous) meObj['anonymous'] = req.session.anonymous;
 
-    if (!meObj) res.send('Not logged in!');
+    if (Object.keys(meObj) < 1) return res.send('Not logged in!');
 
     res.send(meObj);
 });
