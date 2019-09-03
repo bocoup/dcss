@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const { sql } = require('./sqlHelpers');
 const { saltHashPassword, validateHashPassword } = require('./pwHash');
-const { apiError } = require('./api');
+const { apiError, asyncMiddleware } = require('./api');
 
 const pool = new Pool();
 
@@ -28,7 +28,7 @@ const userExistsInDatabase = async function(username, email) {
     return user;
 };
 
-const duplicatedUser = async function(req, res, next) {
+const duplicatedUserInDatabase = async function(req, res, next) {
     const { username, email } = req.body;
     const user = await userExistsInDatabase(username, email);
     if (user) {
@@ -39,7 +39,7 @@ const duplicatedUser = async function(req, res, next) {
     next();
 };
 
-const loginUser = async function(req, res, next) {
+const loginUserBackend = async function(req, res, next) {
     const { username, email, password } = req.body;
     const user = await userExistsInDatabase(username, email);
 
@@ -88,8 +88,9 @@ const loginUser = async function(req, res, next) {
     return apiError(res, invalidUserError);
 };
 
-const createUser = async function(email, username, password) {
+const createUserInDatabase = async function(email, username, password) {
     const client = await pool.connect();
+    let created = false;
     try {
         let salt, passwordHash;
         if (password) {
@@ -98,16 +99,36 @@ const createUser = async function(email, username, password) {
             passwordHash = passwordObj.passwordHash;
         }
         await client.query('BEGIN');
-        await client.query(sql`INSERT INTO users(email, username, hash, salt)
+        const result = await client.query(sql`INSERT INTO users(email, username, hash, salt)
             VALUES(${email}, ${username}, ${passwordHash}, ${salt});`);
         await client.query('COMMIT');
-        return true;
+        created = result.rowCount === 1;
     } catch (e) {
         await client.query('ROLLBACK');
     } finally {
         client.release();
     }
+
+    return created;
 };
+
+const createUserBackend = async function(req, res, next) {
+    const { username, password, email } = req.body;
+    const created = await createUserInDatabase(email, username, password);
+
+    if (!created) {
+        const userCreateError = new Error('User not created. Server error');
+        userCreateError.status = 500;
+        return apiError(res, userCreateError);
+    }
+
+    res.sendStatus(201);
+    next();
+};
+
+const duplicatedUser = asyncMiddleware(duplicatedUserInDatabase);
+const createUser = asyncMiddleware(createUserBackend);
+const loginUser = asyncMiddleware(loginUserBackend);
 
 const requireUser = (req, res, next) => {
     if (!req.session.user) {

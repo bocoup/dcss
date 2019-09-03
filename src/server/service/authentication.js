@@ -10,26 +10,15 @@ const {
     validateRequestUsernameAndEmail,
     validateRequestBody
 } = require('../util/requestValidation');
-const { apiError } = require('../util/api');
 
 const authRouter = Router();
 
-authRouter.post(
-    '/signup',
-    [validateRequestUsernameAndEmail, validateRequestBody, duplicatedUser],
-    async (req, res) => {
-        const { username, password, email } = req.body;
-        const created = await createUser(email, username, password);
-
-        if (!created) {
-            const userCreateError = new Error('User not created. Server error');
-            userCreateError.status = 500;
-            return apiError(res, userCreateError);
-        }
-
-        res.sendStatus(201);
-    }
-);
+authRouter.post('/signup', [
+    validateRequestUsernameAndEmail,
+    validateRequestBody,
+    duplicatedUser,
+    createUser
+]);
 
 authRouter.post(
     '/login',
