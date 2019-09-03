@@ -1,28 +1,24 @@
+const { apiError } = require('./api');
+
 const validateRequestUsernameAndEmail = function(req, res, next) {
     const { username, email } = req.body;
 
     if (!username && !email) {
-        res.status(400).send({ error: 'Username or email must be defined.' });
-        return;
+        return apiError(res, new Error('Username or email must be defined.'));
     }
 
     if (email && !email.includes('@')) {
-        res.status(400).send({ error: 'Email address not in correct format.' });
-        return;
+        return apiError(res, new Error('Email address not in correct format.'));
     }
-
     next();
-
-}
+};
 
 const validateRequestBody = function(req, res, next) {
     if (!req.body) {
-        res.status(400).send({ error: 'No request body!' });
-        return;
+        return apiError(res, new Error('No request body!'));
     }
 
     next();
-}
-
+};
 
 module.exports = { validateRequestUsernameAndEmail, validateRequestBody };
