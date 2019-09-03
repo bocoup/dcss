@@ -12,8 +12,7 @@ const validateRequestUsernameAndEmail = function(req, res, next) {
     }
 
     next();
-
-}
+};
 
 const validateRequestBody = function(req, res, next) {
     if (!req.body) {
@@ -22,7 +21,6 @@ const validateRequestBody = function(req, res, next) {
     }
 
     next();
-}
-
+};
 
 module.exports = { validateRequestUsernameAndEmail, validateRequestBody };
