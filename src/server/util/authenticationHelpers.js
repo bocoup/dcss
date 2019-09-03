@@ -15,21 +15,22 @@ const getUserInDatabase = async function(username, email) {
 
 const userExistsInDatabase = async function(username, email) {
     const rows = await getUserInDatabase(username, email);
-    let user,
-        exists = rows.length > 0;
-    if (exists) {
+    let user = null;
+    if (rows.length > 0) {
         user = rows[0];
-        if (username) exists = user.username === username;
-        if (email) exists = user.email === email;
+
+        // Undo user setting if username or email mismatches
+        if (username && user.username !== username) user = null;
+        if (email && user.email !== email) user = null;
     }
 
-    return { exists, user };
+    return user;
 };
 
 const duplicatedUser = async function(req, res, next) {
     const { username, email } = req.body;
-    const { exists } = await userExistsInDatabase(username, email);
-    if (exists) {
+    const user = await userExistsInDatabase(username, email);
+    if (user) {
         res.status(409).send({
             error: 'Duplicated user. User already exists!'
         });
@@ -41,10 +42,10 @@ const duplicatedUser = async function(req, res, next) {
 
 const loginUser = async function(req, res, next) {
     const { username, email, password } = req.body;
-    const { exists, user } = await userExistsInDatabase(username, email);
+    const user = await userExistsInDatabase(username, email);
 
     // Case when user is found
-    if (exists) {
+    if (user) {
         const { salt, hash } = user;
 
         // Case of anonymous user, where only the username / email stored
