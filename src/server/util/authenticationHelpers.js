@@ -33,12 +33,10 @@ const duplicatedUser = async function(req, res, next) {
     const { username, email } = req.body;
     const user = await userExistsInDatabase(username, email);
     if (user) {
-        res.status(409).send({
-            error: 'Duplicated user. User already exists!'
-        });
-        return;
+        const duplicatedUserError = new Error('User exists.');
+        duplicatedUserError.status = 409
+        return apiError(res, duplicatedUserError);
     }
-
     next();
 };
 
@@ -68,8 +66,6 @@ const loginUser = async function(req, res, next) {
         }
         // Case when user has a password is supplied with a password
         const { passwordHash } = validateHashPassword(password, salt);
-        // disabling because not using an await or generator
-        // eslint-disable-next-line require-atomic-updates
         const match = hash === passwordHash;
         if (match) {
             req.session.user = { anonymous: false, username: user.username, email: user.email };

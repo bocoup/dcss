@@ -20,9 +20,13 @@ authRouter.post(
         const { username, password, email } = req.body;
         const created = await createUser(email, username, password);
 
-        return created
-            ? res.sendStatus(201)
-            : res.status(500).send({ error: 'User not created. Server error' });
+        if (!created) {
+            const userCreateError = new Error('User not created. Server error');
+            userCreateError.status = 500;
+            return apiError(res, userCreateError);
+        }
+
+        res.sendStatus(201);
     }
 );
 
