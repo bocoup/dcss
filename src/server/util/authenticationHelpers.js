@@ -70,7 +70,7 @@ const loginUser = async function(req, res, next) {
             });
             return;
         }
-        // Case when user with is a password is supplied with a password
+        // Case when user has a password is supplied with a password
         else {
             const { passwordHash } = validateHashPassword(password, salt);
             // disabling because not using an await or generator
