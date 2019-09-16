@@ -1,7 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Dropdown } from '../components/dropdown';
-// import { action } from '@storybook/addon-actions';
 
 const dropDownValues = ['Context', 'Anticipate', 'Enact', 'Reflect'];
 
