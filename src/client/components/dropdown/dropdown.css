@@ -1,0 +1,14 @@
+.dropdown-list {
+    width: 200px;
+    height: 40px;
+}
+
+.dropdown-list select {
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    color: #555
+}
