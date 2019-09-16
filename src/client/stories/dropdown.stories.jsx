@@ -3,17 +3,12 @@ import { storiesOf } from '@storybook/react';
 import { Dropdown } from '../components/dropdown';
 // import { action } from '@storybook/addon-actions';
 
-
+const dropDownValues = ['Context', 'Anticipate', 'Enact', 'Reflect'];
 
 storiesOf('Dropdown', module)
-    .add('slide dropdown no title', () => {
-        const values = ['Context', 'Anticipate', 'Enact', 'Reflect'];
-        return <Dropdown values={values} />
-    })
-    // .add('with some emoji', () => (
-    //     <Button onClick={action('clicked')}>
-    //         <span role="img" aria-label="so cool">
-    //             😀 😎 👍 💯
-    //         </span>
-    //     </Button>
-    // ));
+    .add('dropdown no title', () => 
+        <Dropdown values={dropDownValues} />
+    )
+    .add('dropdown with title', () => 
+        <Dropdown title="+ Add" values={dropDownValues} />
+    );
