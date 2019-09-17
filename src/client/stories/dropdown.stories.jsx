@@ -1,11 +1,36 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { Dropdown } from '../components/dropdown';
+import { Dropdown } from 'semantic-ui-react';
 
-const dropDownValues = ['Context', 'Anticipate', 'Enact', 'Reflect'];
+import 'semantic-ui-css/semantic.min.css';
+
+const dropDownValues = [
+    {
+        key: 'context',
+        value: 'context',
+        text: 'Context'
+    },
+    {
+        key: 'anticipate',
+        value: 'anticipate',
+        text: 'Anticipate'
+    },
+    {
+        key: 'enact',
+        value: 'enact',
+        text: 'Enact'
+    },
+    {
+        key: 'reflect',
+        value: 'reflect',
+        text: 'Reflect'
+    }
+];
 
 storiesOf('Dropdown', module)
-    .add('dropdown no title', () => <Dropdown values={dropDownValues} />)
+    .add('dropdown no title', () => (
+        <Dropdown selection options={dropDownValues} />
+    ))
     .add('dropdown with title', () => (
-        <Dropdown title="+ Add" values={dropDownValues} />
+        <Dropdown selection placeholder="Add +" options={dropDownValues} />
     ));
