@@ -1,4 +1,6 @@
 import React from 'react';
-import './slideHolder.css'
+import './slideHolder.css';
 
-export const SlideHolder = (props) => <div className="slide_holder">Slide Holder</div>
+export const SlideHolder = props => (
+    <div className="slide_holder">Slide Holder</div>
+);
