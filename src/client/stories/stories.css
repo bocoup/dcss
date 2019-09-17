@@ -2,9 +2,3 @@ body, #root {
     width: 100%;
     height: 100%;
 }
-
-.slide_editor {
-    width: 75%;
-    height: 100%;
-    background-color: coral;
-}
