@@ -9,3 +9,16 @@ exports.getScenario = async function getScenario(scenarioId) {
         return results.rows[0];
     });
 }
+
+exports.addScenario = async function addScenario(authorId, title, description) {
+    console.log('authorId', authorId);
+    return withClientTransaction( async client => {
+        const result = await client.query(sql`
+INSERT INTO scenario (author_id, title, description)
+    VALUES (${authorId}, ${title}, ${description})
+    RETURNING scenario.id;
+        `);
+
+        return {scenarioId: result.rows[0]};
+    });
+}

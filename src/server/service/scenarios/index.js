@@ -5,7 +5,8 @@ const { validateRequestBody } = require('../../util/requestValidation');
 const scenariosRouter = Router();
 
 const {
-    getScenario
+    getScenario,
+    addScenario
 } = require('./endpoints.js');
 
 scenariosRouter.get('/:scenario_id', [getScenario]);
@@ -14,8 +15,9 @@ scenariosRouter.put('/:scenario_id', [
     validateRequestBody
 ]);
 
-scenariosRouter.post('/:scenario_id/add', [
-    validateRequestBody
+scenariosRouter.post('/add', [
+    validateRequestBody,
+    addScenario
 ]);
 
 scenariosRouter.post('/scenario_id/delete', [
