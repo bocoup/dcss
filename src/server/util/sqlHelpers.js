@@ -9,7 +9,6 @@ function sql(textParts, ...values) {
         }
         return memo + '$' + index + typecast + string;
     }, '');
-    console.log(text, values);
     return { text, values };
 }
 
