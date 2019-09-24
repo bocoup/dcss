@@ -7,23 +7,16 @@ const scenariosRouter = Router();
 const {
     getScenario,
     addScenario,
-    setScenario
+    setScenario,
+    deleteScenario
 } = require('./endpoints.js');
 
 scenariosRouter.get('/:scenario_id', [getScenario]);
 
-scenariosRouter.post('/add', [
-    validateRequestBody,
-    addScenario
-]);
+scenariosRouter.put('/', [validateRequestBody, addScenario]);
 
-scenariosRouter.put('/:scenario_id', [
-    validateRequestBody,
-    setScenario
-]);
+scenariosRouter.post('/:scenario_id', [validateRequestBody, setScenario]);
 
-scenariosRouter.post('/:scenario_id/delete', [
-    validateRequestBody
-]);
+scenariosRouter.delete('/:scenario_id', [validateRequestBody, deleteScenario]);
 
 module.exports = scenariosRouter;

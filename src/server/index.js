@@ -33,7 +33,7 @@ app.use(
 
 app.use('/auth', authRouter);
 app.use('/roles', rolesRouter);
-app.use('/scenarios', scenariosRouter)
+app.use('/scenarios', scenariosRouter);
 app.use('/media', s3Router);
 
 // This handles 404 results from router -- answers all remaining requests
