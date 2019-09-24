@@ -8,10 +8,9 @@ exports.getScenario = async function getScenario(scenarioId) {
         );
         return results.rows[0];
     });
-}
+};
 
 exports.addScenario = async function addScenario(authorId, title, description) {
-    console.log('authorId', authorId);
     return withClientTransaction( async client => {
         const result = await client.query(sql`
 INSERT INTO scenario (author_id, title, description)
@@ -21,4 +20,27 @@ INSERT INTO scenario (author_id, title, description)
 
         return {scenarioId: result.rows[0]};
     });
-}
+};
+
+exports.setScenario = async function setScenario(scenarioId, scenarioData) {
+    const original = await withClient( async client => {
+        return await client.query(
+            sql` SELECT * FROM scenario WHERE id = ${scenarioId};`
+        );
+    });
+    const {author_id, title, description} = original.rows[0];
+
+    return withClientTransaction( async client => {
+        const newAuthorId = scenarioData.author_id || author_id;
+        const newTitle = scenarioData.title || title;
+        const newDescription = scenarioData.description || description;
+        const result = await client.query(sql`
+UPDATE scenario SET
+    author_id = ${newAuthorId},
+    title = ${newTitle},
+    description = ${newDescription}
+    WHERE id = ${scenarioId};
+        `);
+        return {updatedCount: result.rowCount};
+    });
+};
