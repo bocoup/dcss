@@ -1,25 +1,20 @@
 const { sql } = require('../../util/sqlHelpers');
-const { withClient, withClientTransaction } = require('../../util/db');
+const { query, withClientTransaction } = require('../../util/db');
 
 exports.getScenario = async function getScenario(scenarioId) {
-    return withClient(async client => {
-        const results = await client.query(
-            sql` SELECT * FROM scenario WHERE id = ${scenarioId};`
-        );
-        return results.rows[0];
-    });
+    const results = await query(
+        sql` SELECT * FROM scenario WHERE id = ${scenarioId};`
+    );
+    return results.rows[0];
 };
 
 exports.addScenario = async function addScenario(authorId, title, description) {
-    return withClient(async client => {
-        const result = await client.query(sql`
+    const result = await query(sql`
 INSERT INTO scenario (author_id, title, description)
     VALUES (${authorId}, ${title}, ${description})
     RETURNING *;
         `);
-
-        return result.rows[0];
-    });
+    return result.rows[0];
 };
 
 exports.setScenario = async function setScenario(scenarioId, scenarioData) {
@@ -43,11 +38,8 @@ RETURNING *;
 };
 
 exports.deleteScenario = async function deleteScenario(scenarioId) {
-    return withClientTransaction(async client => {
-        const result = await client.query(
-            sql`DELETE FROM scenario WHERE id = ${scenarioId};`
-        );
-
-        return { deletedCount: result.rowCount };
-    });
+    const result = await query(
+        sql`DELETE FROM scenario WHERE id = ${scenarioId};`
+    );
+    return { deletedCount: result.rowCount };
 };
