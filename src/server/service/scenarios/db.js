@@ -11,7 +11,7 @@ exports.getScenario = async function getScenario(scenarioId) {
 };
 
 exports.addScenario = async function addScenario(authorId, title, description) {
-    return withClientTransaction(async client => {
+    return withClient(async client => {
         const result = await client.query(sql`
 INSERT INTO scenario (author_id, title, description)
     VALUES (${authorId}, ${title}, ${description})

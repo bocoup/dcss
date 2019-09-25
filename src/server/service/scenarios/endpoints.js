@@ -6,16 +6,17 @@ const { getUserById } = require('../../util/authenticationHelpers');
 
 exports.getScenarioAsync = async function(req, res) {
     const scenarioId = Number(req.params.scenario_id);
-    const scenarioData = await db.getScenario(scenarioId);
+    const scenario = await db.getScenario(scenarioId);
+    const result = { scenario, status: 200 };
 
-    if (!scenarioData) {
+    if (!scenario) {
         const noScenarioFoundError = new Error('Invalid scenario id');
         noScenarioFoundError.status = 404;
 
         throw noScenarioFoundError;
     }
 
-    res.send(scenarioData);
+    res.send(result);
 };
 
 exports.getScenario = asyncMiddleware(exports.getScenarioAsync);
@@ -32,8 +33,8 @@ exports.addScenarioAsync = async function(req, res) {
     }
 
     try {
-        const result = await db.addScenario(userId, title, description);
-        result.status = 201;
+        const scenario = await db.addScenario(userId, title, description);
+        const result = { scenario, status: 201 };
 
         res.send(result);
     } catch (apiError) {
@@ -52,7 +53,7 @@ exports.setScenarioAsync = async function(req, res) {
 
     if (!author_id && !title && !description) {
         const scenarioUpdateError = new Error(
-            "The scenario's title and description must be provided by a valid user"
+            'Must provide author_id, title, or description to update'
         );
         scenarioUpdateError.status = 409;
         throw scenarioUpdateError;
@@ -89,8 +90,8 @@ exports.deleteScenarioAsync = async function(req, res) {
     }
 
     try {
-        const result = await db.deleteScenario(scenarioId);
-        result.status = 200;
+        const scenario = await db.deleteScenario(scenarioId);
+        const result = { scenario, status: 200 };
 
         res.send(result);
     } catch (apiError) {
