@@ -67,9 +67,7 @@ describe('sql helpers', () => {
                     test: 'omg',
                     undefined: undefined
                 })
-            ).toMatchInlineSnapshot(
-                '',
-                `
+            ).toMatchInlineSnapshot(`
                 Object {
                   "text": "UPDATE \\"test\\"
                 SET  test = $1
@@ -80,8 +78,7 @@ describe('sql helpers', () => {
                     1,
                   ],
                 }
-            `
-            );
+            `);
         });
 
         test('null in object is set', () => {
