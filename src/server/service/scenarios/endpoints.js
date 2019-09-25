@@ -28,7 +28,6 @@ exports.addScenario = asyncMiddleware(async function addScenarioAsync(
 
     if (!userId || !title || !description) {
         const scenarioCreateError = new Error(
-            // eslint-disable-next-line quotes
             "The scenario's title and description must be provided by a valid user"
         );
         scenarioCreateError.status = 409;
