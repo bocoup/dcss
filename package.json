@@ -24,12 +24,14 @@
     "create-migration": "yarn workspace server run create-migration",
     "db-migrate-up": "yarn workspace server run db-migrate-up",
     "db-migrate-down": "yarn workspace server run db-migrate-down",
-    "lint": "npm-run-all lint:js && yarn workspaces run lint",
+    "lint": "npm-run-all \"lint:* {@}\" --",
+    "lint:packages": "yarn workspaces run lint",
     "lint:js": "eslint --ext .json --ext .js . --ignore-pattern 'src/**/*.js'",
     "prettier": "npm-run-all prettier:notSrc && yarn workspaces run prettier",
     "prettier:notSrc": "prettier --write '**/*.js' --ignore-path 'src/**/*.js'",
     "storybook": "yarn workspaces run storybook",
-    "test": "yarn workspace test run test"
+    "jest": "yarn workspace test run test",
+    "test": "npm-run-all jest lint"
   },
   "repository": {
     "type": "git",

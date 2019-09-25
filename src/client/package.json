@@ -47,10 +47,10 @@
     "dev": "webpack-dev-server --mode development",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "lint": "npm-run-all lint:css lint:js",
-    "lint:css": "prettier --check 'components/**/*.css'",
-    "lint:js": "eslint --ext js,jsx . *.js",
-    "prettier": "prettier --write '**/*.js' '**/*.jsx' '**/*.css'",
+    "lint": "npm-run-all lint:css \"lint:js {@}\" --",
+    "lint:css": "prettier -l \"**/*.css\"",
+    "lint:js": "eslint --ext js,jsx .",
+    "prettier": "prettier --write \"**/*.{js,jsx,css}\"",
     "test": "yarn workspace test run test:client"
   }
 }
