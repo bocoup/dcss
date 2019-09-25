@@ -4,7 +4,7 @@ const db = require('./db');
 
 const { getUserById } = require('../../util/authenticationHelpers');
 
-exports.getScenarioAsync = async function(req, res) {
+exports.getScenario= asyncMiddleware(async function getScenarioAsync(req, res) {
     const scenarioId = Number(req.params.scenario_id);
     const scenario = await db.getScenario(scenarioId);
     const result = { scenario, status: 200 };
@@ -17,11 +17,9 @@ exports.getScenarioAsync = async function(req, res) {
     }
 
     res.send(result);
-};
+});
 
-exports.getScenario = asyncMiddleware(exports.getScenarioAsync);
-
-exports.addScenarioAsync = async function(req, res) {
+exports.addScenario = asyncMiddleware(async function addScenarioAsync(req, res) {
     const { userId, title, description } = req.body;
 
     if (!userId || !title || !description) {
@@ -43,11 +41,9 @@ exports.addScenarioAsync = async function(req, res) {
         error.stack = apiError.stack;
         throw error;
     }
-};
+});
 
-exports.addScenario = asyncMiddleware(exports.addScenarioAsync);
-
-exports.setScenarioAsync = async function(req, res) {
+exports.setScenario = asyncMiddleware(async function setScenarioAsync(req, res) {
     const { author_id, title, description } = req.body;
     const scenarioId = req.params.scenario_id;
 
@@ -74,11 +70,9 @@ exports.setScenarioAsync = async function(req, res) {
         error.stack = apiError.stack;
         throw error;
     }
-};
+});
 
-exports.setScenario = asyncMiddleware(exports.setScenarioAsync);
-
-exports.deleteScenarioAsync = async function(req, res) {
+exports.deleteScenario = asyncMiddleware(async function deleteScenarioAsync(req, res) {
     const scenarioId = req.params.scenario_id;
 
     if (!scenarioId) {
@@ -100,6 +94,4 @@ exports.deleteScenarioAsync = async function(req, res) {
         error.stack = apiError.stack;
         throw error;
     }
-};
-
-exports.deleteScenario = asyncMiddleware(exports.deleteScenarioAsync);
+});
