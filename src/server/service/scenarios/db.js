@@ -1,5 +1,5 @@
 const { sql, updateQuery } = require('../../util/sqlHelpers');
-const { query, withClientTransaction } = require('../../util/db');
+const { query } = require('../../util/db');
 
 exports.getScenario = async function getScenario(scenarioId) {
     const results = await query(
@@ -19,7 +19,7 @@ INSERT INTO scenario (author_id, title, description)
 
 exports.setScenario = async function setScenario(scenarioId, scenarioData) {
     const result = await query(
-        updateQuery('scenario', `id = ${scenarioId}`, scenarioData)
+        updateQuery('scenario', { id: scenarioId }, scenarioData)
     );
     return result.rows[0];
 };

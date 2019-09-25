@@ -2,8 +2,6 @@ const { asyncMiddleware } = require('../../util/api');
 
 const db = require('./db');
 
-const { getUserById } = require('../../util/authenticationHelpers');
-
 exports.getScenario = asyncMiddleware(async function getScenarioAsync(
     req,
     res
@@ -30,6 +28,7 @@ exports.addScenario = asyncMiddleware(async function addScenarioAsync(
 
     if (!userId || !title || !description) {
         const scenarioCreateError = new Error(
+            // eslint-disable-next-line quotes
             "The scenario's title and description must be provided by a valid user"
         );
         scenarioCreateError.status = 409;
@@ -88,7 +87,7 @@ exports.deleteScenario = asyncMiddleware(async function deleteScenarioAsync(
     const scenarioId = req.params.scenario_id;
 
     if (!scenarioId) {
-        scenarioDeleteError = new Error(
+        const scenarioDeleteError = new Error(
             'Scenario id required for scenario deletion'
         );
         scenarioDeleteError.status = 409;
