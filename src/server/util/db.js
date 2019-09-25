@@ -10,7 +10,8 @@ exports.withClient = async method => {
     }
 };
 
-exports.query = (...args) => exports.withClient(client => client.query(...args));
+exports.query = (...args) =>
+    exports.withClient(client => client.query(...args));
 
 exports.usingTransaction = async (client, method) => {
     try {

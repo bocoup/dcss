@@ -4,7 +4,10 @@ const db = require('./db');
 
 const { getUserById } = require('../../util/authenticationHelpers');
 
-exports.getScenario= asyncMiddleware(async function getScenarioAsync(req, res) {
+exports.getScenario = asyncMiddleware(async function getScenarioAsync(
+    req,
+    res
+) {
     const scenarioId = Number(req.params.scenario_id);
     const scenario = await db.getScenario(scenarioId);
     const result = { scenario, status: 200 };
@@ -19,7 +22,10 @@ exports.getScenario= asyncMiddleware(async function getScenarioAsync(req, res) {
     res.send(result);
 });
 
-exports.addScenario = asyncMiddleware(async function addScenarioAsync(req, res) {
+exports.addScenario = asyncMiddleware(async function addScenarioAsync(
+    req,
+    res
+) {
     const { userId, title, description } = req.body;
 
     if (!userId || !title || !description) {
@@ -43,7 +49,10 @@ exports.addScenario = asyncMiddleware(async function addScenarioAsync(req, res) 
     }
 });
 
-exports.setScenario = asyncMiddleware(async function setScenarioAsync(req, res) {
+exports.setScenario = asyncMiddleware(async function setScenarioAsync(
+    req,
+    res
+) {
     const { author_id, title, description } = req.body;
     const scenarioId = req.params.scenario_id;
 
@@ -72,7 +81,10 @@ exports.setScenario = asyncMiddleware(async function setScenarioAsync(req, res) 
     }
 });
 
-exports.deleteScenario = asyncMiddleware(async function deleteScenarioAsync(req, res) {
+exports.deleteScenario = asyncMiddleware(async function deleteScenarioAsync(
+    req,
+    res
+) {
     const scenarioId = req.params.scenario_id;
 
     if (!scenarioId) {
