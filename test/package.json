@@ -14,7 +14,7 @@
     },
     "scripts": {
         "lint": "eslint --ext js . **/*.js",
-        "prettier": "prettier --write '**/*.js'",
+        "prettier": "prettier --write \"**/*.js\"",
         "test": "jest client/ server/",
         "test:client": "jest client",
         "test:server": "jest server"
