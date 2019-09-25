@@ -6,3 +6,8 @@ services:
 
 before_script:
   - yarn db-init-local
+
+script:
+  - yarn db-migrate-down -c 999999
+  - yarn db-migrate-up
+  - yarn test
