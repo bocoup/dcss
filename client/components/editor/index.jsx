@@ -1,7 +1,9 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import { Tab } from 'semantic-ui-react';
 import { ScenarioEditor} from '@components/scenarioEditor';
 import { SlideEditor } from '@components/slideEditor';
+
 import './editor.css';
 
 const panes = [
@@ -9,6 +11,8 @@ const panes = [
     { menuItem: 'Slides', render: SlideEditor}
 ];
 
-export const Editor = () => (
+const Editor = () => (
     <Tab panes={panes} />
 );
+
+export default hot(module)(Editor);
