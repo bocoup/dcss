@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import ScenarioList from '@components/scenarioList';
+import ScenariosList from '@components/scenariosList';
 
 const scenarioTestData = [
     {
@@ -21,5 +21,5 @@ const scenarioTestData = [
 ];
 
 storiesOf('Scenario List', module).add('List View', () => (
-    <ScenarioList scenarioData={scenarioTestData} />
+    <ScenariosList scenarioData={scenarioTestData} />
 ));

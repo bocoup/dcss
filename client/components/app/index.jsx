@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { Container } from 'semantic-ui-react';
 
-import './App.css';
+import 'semantic-ui-css/semantic.min.css';
 
 class App extends Component {
     render() {

@@ -3,6 +3,7 @@ import { Route, NavLink, BrowserRouter as Router } from 'react-router-dom';
 
 import App from '@client/components/app';
 import Editor from '@client/components/editor';
+import ScenariosList from '@client/components/scenariosList';
 import Login from '@client/components/login';
 
 function Routes() {
@@ -20,6 +21,9 @@ function Routes() {
                         <NavLink to="/editor">TM Editor</NavLink>
                     </li>
                     <li>
+                        <NavLink to="/demos">Demos</NavLink>
+                    </li>
+                    <li>
                         <a href="https://github.com/mit-teaching-systems-lab/threeflows">
                             Source Code
                         </a>
@@ -29,6 +33,7 @@ function Routes() {
                 <hr />
                 <Route path="/" component={App} />
                 <Route path="/editor" component={Editor} />
+                <Route path="/demos" component={ScenariosList} />
                 <Route path="/login" component={Login} />
             </div>
         </Router>
