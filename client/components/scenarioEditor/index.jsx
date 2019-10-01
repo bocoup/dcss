@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
-import {
-    Container,
-    Form,
-    Grid,
-    Input,
-    Label,
-    TextArea
-} from 'semantic-ui-react';
+import { Container, Form, Grid } from 'semantic-ui-react';
 
 import './ScenarioEditor.css';
 
@@ -32,7 +25,7 @@ class ScenarioEditor extends Component {
         });
     }
 
-    async handleSubmit(event) {
+    async handleSubmit() {
         if (!this.state.title || !this.state.description) {
             this.setState({
                 saveMessage:
@@ -87,8 +80,6 @@ class ScenarioEditor extends Component {
                                         className="tm__scenario-save"
                                         primary
                                         loading
-                                        left
-                                        floated
                                     />
                                 ) : (
                                     <Form.Button
@@ -96,8 +87,6 @@ class ScenarioEditor extends Component {
                                         className="tm__scenario-save"
                                         primary
                                         onClick={this.handleSubmit}
-                                        left
-                                        floated
                                     >
                                         Submit
                                     </Form.Button>
