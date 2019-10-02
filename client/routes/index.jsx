@@ -3,25 +3,22 @@ import { Route, NavLink, BrowserRouter as Router } from 'react-router-dom';
 
 import App from '@client/components/app';
 import Editor from '@client/components/editor';
-import ScenariosList from '@client/components/scenariosList';
 import Login from '@client/components/login';
 
 function Routes() {
     return (
         <Router>
             <div>
+                <h1>Teacher Moments</h1>
                 <ul>
                     <li>
                         <NavLink to="/">Home</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/login">Login</NavLink>
-                    </li>
-                    <li>
                         <NavLink to="/editor">TM Editor</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/demos">Demos</NavLink>
+                        <NavLink to="/login">Login</NavLink>
                     </li>
                     <li>
                         <a href="https://github.com/mit-teaching-systems-lab/threeflows">
@@ -31,9 +28,9 @@ function Routes() {
                 </ul>
 
                 <hr />
-                <Route path="/" component={App} />
+
+                <Route exact path="/" component={App} />
                 <Route path="/editor" component={Editor} />
-                <Route path="/demos" component={ScenariosList} />
                 <Route path="/login" component={Login} />
             </div>
         </Router>
