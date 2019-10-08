@@ -45,9 +45,7 @@ class ScenariosList extends Component {
     }
 
     async getScenarios() {
-        const scenariosResponse = await (await fetch(
-            'api/scenarios/all'
-        )).json();
+        const scenariosResponse = await (await fetch('api/scenarios')).json();
         if (scenariosResponse.status === 200) {
             this.setState({ scenarioData: scenariosResponse.scenarios });
         }
