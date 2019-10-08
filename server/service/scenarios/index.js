@@ -12,7 +12,7 @@ const {
     deleteScenario
 } = require('./endpoints.js');
 
-scenariosRouter.get('/all', getAllScenarios);
+scenariosRouter.get('/', getAllScenarios);
 scenariosRouter.get('/:scenario_id', [lookupScenario(), getScenario]);
 
 scenariosRouter.put('/', [validateRequestBody, addScenario]);
