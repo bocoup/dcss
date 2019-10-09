@@ -5,13 +5,13 @@
 ### Local Setup
 
 1. Install Dependencies
-   `yarn install`
+  `yarn install`
 
 2. Set up local database  
-Follow the instructions here: [https://github.com/bocoup/threeflows#local-database-setup](https://github.com/bocoup/threeflows#local-database-setup)
+  Follow the instructions here: [Local Database Setup](#local-database-setup)
 
 3. Start the dev server
-   `yarn start`
+  `yarn start`
 
 4. Start the backend server
 
@@ -53,6 +53,10 @@ This project uses [Eslint](https://eslint.org/) for linting. To catch syntax and
   brew install postgres
   ```
   Make sure that the Postgres version installed is 11.4.
+- Install `db-migrate`
+  ```
+  npm install db-migrate -g
+  ```
 - Start PostgreSQL
   - Mac:
   ```
