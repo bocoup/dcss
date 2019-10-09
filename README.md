@@ -14,7 +14,6 @@
   - If you are using Mac or Linux, export the required environment variables first: `export $(cat config/dev)`
   - And then run the dev server with: `yarn dev`
   - You should see your local site at http://localhost:3000.
-1. Start the application server: `yarn start`
   - This is the list of all environment variables that are are pre-populated in `config/dev`, need to be exported prior to running the Teacher Moments server:
     ```
     PGUSER=
@@ -53,7 +52,7 @@ This project uses [Eslint](https://eslint.org/) for linting. To catch syntax and
     sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
     ```
   Make sure that the Postgres version installed is 11.4.
-- Start PostgreSQL and make yourself a default d
+- Start PostgreSQL and make yourself a default database
   - Mac:
     ```
     brew services start postgresql
@@ -74,7 +73,7 @@ On linux, you'll need to run `export PGUSE=${yourusername}`;
 yarn db-init-local
 ```
 
-This command creates a database called `teachermoments` and then sets up a role called tm and then creates all of the tables in `teachermoments`. To do this manually, create a databse called `teachermoments`: `$createdb teachermoments`, then create the role `tm` with a password `teachermoments`, then run `db-migrate up`.
+This command creates a database called `teachermoments` and then sets up a role called tm and then creates all of the tables in `teachermoments`. To do this manually, create a database called `teachermoments`: `$createdb teachermoments`, then create the role `tm` with a password `teachermoments`, then run `db-migrate up`.
 
 ### Creating Database Migrations
 
