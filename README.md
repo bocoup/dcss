@@ -4,14 +4,16 @@
 
 ### Local Setup
 
-1. Install Dependencies
-   `yarn install`
+1. Install `yarn` (version >=1.19.x): 
+  `npm install yarn@latest -g`
 
-2. Set up local database  
-Follow the instructions here: [https://github.com/bocoup/threeflows#local-database-setup](https://github.com/bocoup/threeflows#local-database-setup)
+1. Install Dependencies: 
+  `yarn install`
 
-3. Start the dev server
-   `yarn start`
+2. Set up local database: [Local Database Setup](#local-database-setup)
+
+3. Start the dev server:
+  `yarn start`
 
 4. Start the backend server
 
