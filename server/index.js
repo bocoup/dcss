@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -18,10 +19,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 const poolConfig = getDbConfig();
 
-app.use(express.static('../../dist'));
 app.use(bodyParser.json());
 app.use(cors());
-console.log('poolConfig', poolConfig);
+
 app.use(
     session({
         secret: 'mit tsl teacher moments',
@@ -55,3 +55,5 @@ listener.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`Listening on ${port}`);
 });
+
+module.exports = {listener, app}
