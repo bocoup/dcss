@@ -56,4 +56,4 @@ listener.listen(port, () => {
     console.log(`Listening on ${port}`);
 });
 
-module.exports = {listener, app}
+module.exports = { listener, app };

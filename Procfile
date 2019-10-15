@@ -1,1 +1,1 @@
-web: yarn run build && node heroku-server.js
+web: node heroku-server.js
