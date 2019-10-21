@@ -174,6 +174,7 @@ class Slides extends React.Component {
                                 className="Slides-slide-sidebar-container"
                             >
                                 <Card
+                                    className="Slides-slide-sidebar-card"
                                     onClick={() =>
                                         this.setState({
                                             currentSlideIndex: index
@@ -185,9 +186,15 @@ class Slides extends React.Component {
                                         {slide.components.map(
                                             ({ type }, index) => {
                                                 const {
-                                                    Card = () => <b>{type}</b>
+                                                    Card: ComponentCard = () => (
+                                                        <b>{type}</b>
+                                                    )
                                                 } = Components[type];
-                                                return <Card key={index} />;
+                                                return (
+                                                    <ComponentCard
+                                                        key={index}
+                                                    />
+                                                );
                                             }
                                         )}
                                         <div className="Slides-button-bar">
