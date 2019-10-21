@@ -87,6 +87,8 @@ class Slides extends React.Component {
     }
 
     async moveSlide(fromIndex, toIndex) {
+        this.props.updateEditorMessage('Moving slides...');
+
         const { scenarioId } = this.props;
         const slides = this.state.slides.slice();
         const from = slides[fromIndex];
@@ -167,7 +169,10 @@ class Slides extends React.Component {
                             />
                         </Grid.Row>
                         {slides.map((slide, index) => (
-                            <Grid.Row key={slide.id}>
+                            <Grid.Row
+                                key={slide.id}
+                                className="Slides-slide-sidebar-container"
+                            >
                                 <Card
                                     onClick={() =>
                                         this.setState({
