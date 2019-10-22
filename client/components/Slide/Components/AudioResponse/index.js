@@ -2,9 +2,7 @@ import { type } from './type';
 export { type };
 export const defaultValue = () => ({
     type,
-    prompt: 'Text Prompt (displayed before input field as label)',
-    placeholder: 'Placeholder Text',
-    responseId: 'response-1'
+    prompt: 'Audio Recording Prompt'
 });
 
 export { default as Display } from './Display';
