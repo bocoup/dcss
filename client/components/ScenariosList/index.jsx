@@ -15,6 +15,7 @@ const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
     return scenarioData.map(({ id, title, description }) => {
         return (
             <Grid.Column width={4} key={id} className="tm__scenario-entry">
+
                 <Header as="h3">{title}</Header>
                 <p>{description}</p>
                 {isLoggedIn && (
