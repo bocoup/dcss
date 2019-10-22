@@ -5,6 +5,7 @@ import { Button, Container, Header, Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import 'semantic-ui-css/semantic.min.css';
+import './scenariosList.css';
 
 const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
     if (!scenarioData.length) {
@@ -13,7 +14,7 @@ const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
 
     return scenarioData.map(({ id, title, description }) => {
         return (
-            <Grid.Column width={4} key={id}>
+            <Grid.Column width={4} key={id} className="tm__scenario-entry">
                 <Header as="h3">{title}</Header>
                 <p>{description}</p>
                 {isLoggedIn && (
