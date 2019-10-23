@@ -5,7 +5,7 @@ import { Button, Container, Header, Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import 'semantic-ui-css/semantic.min.css';
-import './scenariosList.css';
+import './ScenariosList.css';
 
 const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
     if (!scenarioData.length) {
