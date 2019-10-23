@@ -2,3 +2,7 @@
     background-color:#e0e0e0;
     transform: translate(1px, 1px);
 }
+
+.tm__scenario-desc {
+    height: 150px;
+}

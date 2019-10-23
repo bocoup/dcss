@@ -14,9 +14,9 @@ const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
 
     return scenarioData.map(({ id, title, description }) => {
         return (
-            <Grid.Column width={4} key={id} className="tm__scenario-entry">
+            <Grid.Column  mobile={16} tablet={8} computer={4} key={id} className="tm__scenario-entry">
                 <Header as="h3">{title}</Header>
-                <p>{description}</p>
+                <p className="tm__scenario-desc">{description.length > 210 ? truncateScenarioDescription(description) : description }</p>
                 {isLoggedIn && (
                     <Button
                         basic
@@ -59,7 +59,7 @@ class ScenariosList extends Component {
         return (
             <Container>
                 <h2>Practice spaces for teacher preparation programs</h2>
-                <Grid relaxed stackable>
+                <Grid stackable padded>
                     <ScenarioEntries
                         scenarioData={this.state.scenarioData}
                         isLoggedIn={this.props.isLoggedIn}
@@ -78,6 +78,11 @@ ScenariosList.propTypes = {
 function mapStateToProps(state) {
     const { isLoggedIn, username } = state.login;
     return { isLoggedIn, username };
+}
+
+function truncateScenarioDescription(desc) {
+    let endLength = window.innerWidth > 1024 ? 245 : 180;
+    return desc.substring(0, endLength).concat("...")
 }
 
 export default connect(
