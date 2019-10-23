@@ -2,7 +2,7 @@ import { type } from './type';
 export { type };
 export const defaultValue = () => ({
     type,
-    prompt: 'Audio Recording Prompt'
+    prompt: 'Provide a prompt for users to respond to here.'
 });
 
 export { default as Display } from './Display';
