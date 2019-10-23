@@ -22,9 +22,7 @@ const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
                 className="tm__scenario-entry"
             >
                 <Header as="h3">{title}</Header>
-                <p className="tm__scenario-desc">
-                    {description}
-                </p>
+                <p className="tm__scenario-desc">{description}</p>
                 {isLoggedIn && (
                     <Button
                         basic
