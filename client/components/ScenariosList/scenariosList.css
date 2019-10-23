@@ -16,4 +16,5 @@
 
 .tm__scenario-desc {
     height: 150px;
+    overflow-y: auto;
 }

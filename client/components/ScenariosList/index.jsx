@@ -7,11 +7,6 @@ import PropTypes from 'prop-types';
 import 'semantic-ui-css/semantic.min.css';
 import './ScenariosList.css';
 
-function truncateScenarioDescription(desc) {
-    let endLength = window.innerWidth > 1024 ? 245 : 180;
-    return desc.substring(0, endLength).concat('...');
-}
-
 const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
     if (!scenarioData.length) {
         return null;
@@ -28,9 +23,7 @@ const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
             >
                 <Header as="h3">{title}</Header>
                 <p className="tm__scenario-desc">
-                    {description.length > 210
-                        ? truncateScenarioDescription(description)
-                        : description}
+                    {description}
                 </p>
                 {isLoggedIn && (
                     <Button
