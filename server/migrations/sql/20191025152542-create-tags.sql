@@ -8,7 +8,7 @@ VALUES
  ('category'),
  ('topic');
 
- CREATE TABLE tag (
+CREATE TABLE tag (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL CHECK(name <> ''),
     tag_type_id INT NOT NULL REFERENCES tag_type(id)
