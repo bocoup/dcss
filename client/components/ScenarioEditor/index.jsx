@@ -11,26 +11,32 @@ class ScenarioEditor extends Component {
         super(props);
         this.state = {
             saving: false,
-            // TODO: these need to be populated
-            //       by the data stored in the
-            //       "tag" table, grouped by
-            //       "tag_type"...
-            categories: [
-                { id: 1, name: 'Official' },
-                { id: 2, name: 'Community' }
-            ],
-            topics: []
+            categories: [],
+            topics: [],
+            scenarioCategories: []
         };
 
         this.getScenarioData = this.getScenarioData.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onChangeCategories = this.onChangeCategories.bind(this);
 
         if (this.props.scenarioId === 'new') {
-            this.props.setScenario({ title: '', description: '' });
+            this.props.setScenario({
+                title: '',
+                description: '',
+                categories: []
+            });
         } else {
             this.getScenarioData();
         }
+    }
+
+    async componentDidMount() {
+        const allCategories = await (await fetch(
+            '/api/tags/categories'
+        )).json();
+        this.setState({ categories: allCategories });
     }
 
     async getScenarioData() {
@@ -52,7 +58,7 @@ class ScenarioEditor extends Component {
                 // tag (category or topic) ids
                 //
                 // The list [2] is for mockup purposes.
-                categories: scenarioResponse.scenario.categories || [2],
+                categories: scenarioResponse.scenario.categories,
                 topics: scenarioResponse.scenario.topics || []
             });
         }
@@ -61,6 +67,10 @@ class ScenarioEditor extends Component {
     onChange(event) {
         this.props.updateEditorMessage('');
         this.props.setScenario({ [event.target.name]: event.target.value });
+    }
+
+    onChangeCategories(event, { value }) {
+        this.setState({ scenarioCategories: value });
     }
 
     async onSubmit() {
@@ -74,9 +84,10 @@ class ScenarioEditor extends Component {
         const data = {
             title: this.props.title,
             description: this.props.description,
-            categories: this.props.categories,
+            categories: this.state.scenarioCategories,
             topics: this.props.topics
         };
+
         const saveResponse = await (await this.props.submitCB(data)).json();
 
         switch (saveResponse.status) {
@@ -149,6 +160,7 @@ class ScenarioEditor extends Component {
                                         <label>Categories</label>
                                         <Dropdown
                                             label="Categories"
+                                            name="categories"
                                             placeholder="Select..."
                                             fluid
                                             multiple
@@ -157,10 +169,11 @@ class ScenarioEditor extends Component {
                                                 category => ({
                                                     key: category.id,
                                                     text: category.name,
-                                                    value: category.id
+                                                    value: category.name
                                                 })
                                             )}
                                             defaultValue={this.props.categories}
+                                            onChange={this.onChangeCategories}
                                         />
                                     </Form.Field>
                                 )}
