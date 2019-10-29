@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import * as Components from '@components/Slide/Components';
 import './SlideComponentsList.css';
 
-const SlideComponentsList = ({ components }) => {
+const SVGSlideComponentsList = ({ asSVG = false, components }) => {
     const style = {
         height: '150px',
         overflow: 'hidden'
     };
-    return (
+    return asSVG ? (
         <div style={style}>
             <svg width="500" height="400">
                 {/* intentionally break out */}
@@ -25,10 +25,17 @@ const SlideComponentsList = ({ components }) => {
                 </foreignObject>
             </svg>
         </div>
+    ) : (
+        components.map((value, index) => {
+            const { type } = value;
+            const { Display } = Components[type];
+            return <Display key={`slide${index}`} {...value} />;
+        })
     );
 };
 
-SlideComponentsList.propTypes = {
+SVGSlideComponentsList.propTypes = {
+    asSVG: PropTypes.boolean,
     components: PropTypes.array
 };
-export default SlideComponentsList;
+export default SVGSlideComponentsList;

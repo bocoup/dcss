@@ -198,6 +198,7 @@ class Slides extends React.Component {
                                         <Card.Header>{slide.title}</Card.Header>
                                         <Card.Content>
                                             <SlideComponentsList
+                                                asSVG={true}
                                                 components={slide.components}
                                             />
                                             <div className="Slides-button-bar">
