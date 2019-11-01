@@ -170,7 +170,7 @@ class Editor extends Component {
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
-                <Segment attached="bottom">
+                <Segment attached="bottom" className="Editor-pane">
                     {this.state.scenarioId !== 'new' && (
                         <EditorMenu
                             type="scenario"
@@ -190,7 +190,8 @@ class Editor extends Component {
                             }}
                         />
                     )}
-                    <div>{this.state.tabs[this.state.activeTab]}</div>
+
+                    {this.state.tabs[this.state.activeTab]}
                 </Segment>
             </div>
         );
