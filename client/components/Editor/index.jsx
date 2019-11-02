@@ -6,6 +6,7 @@ import EditorMenu from '@components/EditorMenu';
 import ScenarioEditor from '@components/ScenarioEditor';
 import Scenario from '@components/Scenario';
 import Slides from './Slides';
+import strings from '@client/strings';
 
 import './editor.css';
 
@@ -51,7 +52,7 @@ class Editor extends Component {
             // TODO: Determine if we need to actually
             //       save the scenario, or if the
             //       auto-save is sufficient.
-            this.updateEditorMessage('Teacher Moment saved');
+            this.updateEditorMessage(`${strings.title.singular} Saved`);
         }
     }
 

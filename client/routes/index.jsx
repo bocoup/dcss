@@ -15,6 +15,7 @@ import Login from '@client/components/Login';
 import CreateAccount from '@client/components/CreateAccount';
 
 import Session from '@client/util/session';
+import strings from '@client/strings';
 
 Session.timeout();
 
@@ -22,7 +23,7 @@ function Routes() {
     return (
         <Router>
             <h1>
-                <NavLink to="/">Teacher Moments</NavLink>
+                <NavLink to="/">{strings.title.plural}</NavLink>
             </h1>
 
             <Switch>
@@ -43,7 +44,7 @@ const GeneralRoutes = () => {
                 {Session.isSessionActive() && (
                     <React.Fragment>
                         <Menu.Item>
-                            <NavLink to="/editor/new">Create a Moment</NavLink>
+                            <NavLink to="/editor/new">Create a {strings.title.singular}</NavLink>
                         </Menu.Item>
                         <Menu.Item>
                             <NavLink to="/facilitator">Facilitator</NavLink>
