@@ -85,7 +85,7 @@ class Login extends Component {
         }
 
         return (
-            <Form className="login__form">
+            <Form className="login__form" onSubmit={this.onLogIn}>
                 <Form.Field>
                     <label htmlFor="name">Username</label>
                     <input
@@ -109,12 +109,7 @@ class Login extends Component {
                     <Grid.Column>
                         <Item>
                             <Item.Extra>
-                                <Button
-                                    type="submit"
-                                    primary
-                                    size="large"
-                                    onClick={this.onLogIn}
-                                >
+                                <Button type="submit" primary size="large">
                                     Log in
                                 </Button>
                             </Item.Extra>
