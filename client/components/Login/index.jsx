@@ -30,7 +30,11 @@ class Login extends Component {
         this.setState({ [`${event.target.name}Input`]: event.target.value });
     }
 
-    async onLogIn() {
+    onLogIn(event) {
+        event.preventDefault();
+        this.handleLogin();
+    }
+    async handleLogin() {
         const body = JSON.stringify({
             username: this.state.usernameInput,
             password: this.state.passwordInput
@@ -51,8 +55,8 @@ class Login extends Component {
             this.setState({ loginError });
             this.props.logIn(username);
             Session.create({ username, timeout: Date.now() });
+            this.props.history.push('/');
         }
-        this.props.history.push('/');
     }
 
     async onLogOut() {
