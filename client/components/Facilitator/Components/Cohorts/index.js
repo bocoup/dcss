@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { List } from 'semantic-ui-react';
 import { selectIndexRequest, selectCohortIds } from '@client/reducers/cohort';
 import { cohortRequestList, cohortCreate } from '@client/actions/cohort';
+import CohortLink from './CohortLink';
 
 export class CohortIndex extends React.Component {
     constructor(props) {
@@ -26,11 +28,17 @@ export class CohortIndex extends React.Component {
     }
 
     render() {
-        const { status, ids, error } = this.props;
+        const { ids } = this.props;
         return (
             <div>
-                Debug View:
-                <pre>{JSON.stringify({ status, ids, error }, null, 2)}</pre>
+                <h2>My Cohorts:</h2>
+                <List>
+                    {ids.map(id => (
+                        <List.Item key={id}>
+                            <CohortLink id={id} />
+                        </List.Item>
+                    ))}
+                </List>
                 <button onClick={this.onCreate}>Create</button>
             </div>
         );

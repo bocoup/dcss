@@ -3,7 +3,8 @@ import { combineReducers } from 'redux';
 import {
     COHORT_REQUEST_LIST,
     COHORT_REQUEST_LIST_ERROR,
-    COHORT_REQUEST_LIST_SUCCESS
+    COHORT_REQUEST_LIST_SUCCESS,
+    COHORT_CREATE_SUCCESS
 } from '../actions/types';
 
 const defaultState = {
@@ -26,14 +27,32 @@ const index = (state = defaultState.index, action) => {
         }
         return newState;
     }
+
+    if (type === COHORT_CREATE_SUCCESS) {
+        const { cohort } = action;
+        return {
+            ...state,
+            [cohort.id]: {
+                ...cohort,
+                role: 'owner'
+            }
+        };
+    }
+
     return state;
 };
+
+export const selectCohort = (state, id) =>
+    state.cohort.index[id] || { name: 'Error: Missing Cohort', role: 'error' };
 
 const indexOrder = (state = defaultState.indexOrder, action) => {
     const { type, cohorts } = action;
 
     if (type === COHORT_REQUEST_LIST_SUCCESS) {
         return cohorts.map(({ id }) => id);
+    }
+    if (type === COHORT_CREATE_SUCCESS) {
+        return [...state, action.cohort.id];
     }
     return state;
 };
