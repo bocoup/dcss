@@ -41,10 +41,15 @@ exports.getAllScenarios = async function getAllScenarios() {
     return resultsWithCategories;
 };
 
-exports.addScenario = async function addScenario(authorId, title, description) {
+exports.addScenario = async function addScenario(
+    authorId,
+    title,
+    description,
+    status
+) {
     const result = await query(sql`
-INSERT INTO scenario (author_id, title, description)
-    VALUES (${authorId}, ${title}, ${description})
+INSERT INTO scenario (author_id, title, description, status)
+    VALUES (${authorId}, ${title}, ${description}, ${status})
     RETURNING *;
         `);
     return result.rows[0];

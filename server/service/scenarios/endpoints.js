@@ -32,18 +32,23 @@ exports.addScenario = asyncMiddleware(async function addScenarioAsync(
     res
 ) {
     const userId = req.session.user.id;
-    const { title, description, categories } = req.body;
+    const { title, description, categories, status } = req.body;
 
-    if (!userId || !title || !description) {
+    if (!userId || !title || !description || !status) {
         const scenarioCreateError = new Error(
-            "The scenario's title and description must be provided by a valid user"
+            "The scenario's title, description, and draft status must be provided by a valid user"
         );
         scenarioCreateError.status = 409;
         throw scenarioCreateError;
     }
 
     try {
-        const scenario = await db.addScenario(userId, title, description);
+        const scenario = await db.addScenario(
+            userId,
+            title,
+            description,
+            status
+        );
         await db.setScenarioCategories(scenario.id, categories);
         const result = { scenario, status: 201 };
 
