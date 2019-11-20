@@ -15,7 +15,7 @@ const ScenarioEntries = ({ scenarioData, isLoggedIn }) => {
     // only filter out scenario if there is a path
     return scenarioData.map(({ id, title, description }) => {
         return (
-            <Card key={id}>
+            <Card className="scenario__entry" key={id}>
                 <Card.Content>
                     <Card.Header>{title}</Card.Header>
                     <Card.Description>{description}</Card.Description>
