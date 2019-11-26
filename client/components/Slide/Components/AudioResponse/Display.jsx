@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Header, Icon, Segment } from 'semantic-ui-react';
 import PromptRequiredLabel from '../PromptRequiredLabel';
+import ResponseRecall from '@components/Slide/Components/ResponseRecall/Display';
 import MicRecorder from 'mic-recorder-to-mp3';
 import { detect } from 'detect-browser';
 import { connect } from 'react-redux';
@@ -72,6 +73,7 @@ class Display extends Component {
         });
 
         const { created_at } = this;
+        const { recallId } = this.props;
 
         // This saves every recording that the user creates
         this.props.onResponseChange(
@@ -80,6 +82,7 @@ class Display extends Component {
                 created_at,
                 ended_at: new Date().toISOString(),
                 name,
+                recallId,
                 type,
                 value
             }
@@ -104,7 +107,7 @@ class Display extends Component {
 
     render() {
         const { isRecording, blobURL } = this.state;
-        const { prompt, responseId, required } = this.props;
+        const { prompt, recallId, responseId, required, run } = this.props;
         const { onChange, onFocus } = this;
         const fulfilled = blobURL ? true : false;
         const header = this.browserSupported ? (
@@ -118,6 +121,7 @@ class Display extends Component {
 
         return this.browserSupported ? (
             <Segment>
+                {recallId && <ResponseRecall run={run} recallId={recallId} />}
                 {!isRecording && (
                     <Button basic toggle onClick={this.onStart}>
                         <Icon
@@ -168,6 +172,7 @@ Display.propTypes = {
     onResponseChange: PropTypes.func,
     placeholder: PropTypes.string,
     prompt: PropTypes.string,
+    recallId: PropTypes.string,
     required: PropTypes.bool,
     responseId: PropTypes.string,
     run: PropTypes.object,

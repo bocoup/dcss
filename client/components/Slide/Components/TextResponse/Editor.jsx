@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Container, Form } from 'semantic-ui-react';
+import { Accordion, Checkbox, Container, Form, Icon } from 'semantic-ui-react';
 import { type } from './type';
+import ResponseRecall from '@components/Slide/Components/ResponseRecall/Editor';
 import './TextResponse.css';
 
 class TextResponseEditor extends React.Component {
@@ -10,37 +11,77 @@ class TextResponseEditor extends React.Component {
         const {
             prompt = 'Text Prompt (displayed before input field as label)',
             placeholder = 'Placeholder Text',
+            recallId = '',
             required,
             responseId = ''
         } = props.value;
         this.state = {
+            activeIndex: recallId ? 0 : -1,
             prompt,
             placeholder,
+            recallId,
             required,
             responseId
         };
 
-        this.onTextareaChange = this.onTextareaChange.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.onRequirementChange = this.onRequirementChange.bind(this);
+        this.onRecallChange = this.onRecallChange.bind(this);
+        this.toggleOptional = this.toggleOptional.bind(this);
+        this.updateState = this.updateState.bind(this);
     }
 
     render() {
-        const { prompt, placeholder, required } = this.state;
-        const { onTextareaChange, onRequirementChange } = this;
+        const {
+            activeIndex,
+            prompt,
+            placeholder,
+            recallId,
+            required
+        } = this.state;
+        const { scenarioId } = this.props;
+        const {
+            onChange,
+            onRecallChange,
+            onRequirementChange,
+            toggleOptional
+        } = this;
         return (
             <Form>
                 <Container fluid>
+                    <Accordion>
+                        <Accordion.Title
+                            active={activeIndex === 0}
+                            index={0}
+                            onClick={toggleOptional}
+                        >
+                            <Icon name="dropdown" />
+                            Optionally Embed A Previous Response
+                        </Accordion.Title>
+                        <Accordion.Content active={activeIndex === 0}>
+                            <ResponseRecall
+                                style={{ marginBottom: '1rem' }}
+                                value={{
+                                    components: [],
+                                    recallId
+                                }}
+                                scenarioId={scenarioId}
+                                onChange={onRecallChange}
+                            />
+                        </Accordion.Content>
+                    </Accordion>
+
                     <Form.TextArea
                         label="Prompt"
                         name="prompt"
                         value={prompt}
-                        onChange={onTextareaChange}
+                        onChange={onChange}
                     />
                     <Form.TextArea
                         label="Placeholder"
                         name="placeholder"
                         value={placeholder}
-                        onChange={onTextareaChange}
+                        onChange={onChange}
                     />
                     <Checkbox
                         name="required"
@@ -54,22 +95,40 @@ class TextResponseEditor extends React.Component {
     }
 
     updateState() {
-        const { prompt, placeholder, required, responseId } = this.state;
+        const {
+            prompt,
+            placeholder,
+            recallId,
+            required,
+            responseId
+        } = this.state;
         this.props.onChange({
             type,
             prompt,
             placeholder,
+            recallId,
             required,
             responseId
         });
+    }
+
+    onRecallChange({ recallId }) {
+        this.setState({ recallId }, this.updateState);
     }
 
     onRequirementChange(event, { name, checked }) {
         this.setState({ [name]: checked }, this.updateState);
     }
 
-    onTextareaChange(event, { name, value }) {
+    onChange(event, { name, value }) {
         this.setState({ [name]: value }, this.updateState);
+    }
+
+    toggleOptional(event, { index }) {
+        const { activeIndex } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({ activeIndex: newIndex });
     }
 }
 
@@ -79,6 +138,7 @@ TextResponseEditor.propTypes = {
     value: PropTypes.shape({
         placeholder: PropTypes.string,
         prompt: PropTypes.string,
+        recallId: PropTypes.string,
         required: PropTypes.bool,
         responseId: PropTypes.string,
         type: PropTypes.oneOf([type])

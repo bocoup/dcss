@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Checkbox,
+    Accordion,
     Button,
+    Checkbox,
     Form,
     Icon,
     Input,
@@ -12,6 +13,7 @@ import {
 import { type } from './type';
 import Sortable from 'react-sortablejs';
 import EditorMenu from '@components/EditorMenu';
+import ResponseRecall from '@components/Slide/Components/ResponseRecall/Editor';
 
 class MultiButtonResponseEditor extends React.Component {
     constructor(props) {
@@ -26,13 +28,16 @@ class MultiButtonResponseEditor extends React.Component {
                 */
             ],
             prompt = '',
+            recallId = '',
             required,
             responseId = ''
         } = props.value;
 
         this.state = {
+            activeIndex: recallId ? 0 : -1,
             buttons,
             prompt,
+            recallId,
             required,
             responseId
         };
@@ -43,20 +48,27 @@ class MultiButtonResponseEditor extends React.Component {
         this.onChangePrompt = this.onChangePrompt.bind(this);
         this.onDeleteButton = this.onDeleteButton.bind(this);
         this.onFocusButtonDetail = this.onFocusButtonDetail.bind(this);
+        this.onRecallChange = this.onRecallChange.bind(this);
         this.onRequirementChange = this.onRequirementChange.bind(this);
+        this.toggleOptional = this.toggleOptional.bind(this);
 
         this.updateState = this.updateState.bind(this);
     }
 
     updateState() {
-        const { prompt, buttons, required, responseId } = this.state;
+        const { buttons, prompt, recallId, required, responseId } = this.state;
         this.props.onChange({
             type,
-            prompt,
             buttons,
+            prompt,
+            recallId,
             required,
             responseId
         });
+    }
+
+    onRecallChange({ recallId }) {
+        this.setState({ recallId }, this.updateState);
     }
 
     onRequirementChange(event, { name, checked }) {
@@ -116,22 +128,54 @@ class MultiButtonResponseEditor extends React.Component {
         this.setState({ buttons }, this.updateState);
     }
 
+    toggleOptional(event, { index }) {
+        const { activeIndex } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({ activeIndex: newIndex });
+    }
+
     render() {
-        const { buttons, prompt, required } = this.state;
+        const { scenarioId } = this.props;
+        const { activeIndex, buttons, prompt, recallId, required } = this.state;
         const {
             onAddButton,
             onChangeButtonDetail,
             onChangeButtonOrder,
+            onRecallChange,
             onChangePrompt,
             onDeleteButton,
             onFocusButtonDetail,
             onRequirementChange,
+            toggleOptional,
             updateState
         } = this;
+
         return (
             <Form>
+                <Accordion>
+                    <Accordion.Title
+                        active={activeIndex === 0}
+                        index={0}
+                        onClick={toggleOptional}
+                    >
+                        <Icon name="dropdown" />
+                        Optionally Embed A Previous Response
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                        <ResponseRecall
+                            style={{ marginBottom: '1rem' }}
+                            value={{
+                                components: [],
+                                recallId
+                            }}
+                            scenarioId={scenarioId}
+                            onChange={onRecallChange}
+                        />
+                    </Accordion.Content>
+                </Accordion>
                 <Form.TextArea
-                    label="Text Prompt (displayed before buttons)"
+                    label="Prompt (displayed before buttons)"
                     name="prompt"
                     value={prompt}
                     onChange={onChangePrompt}
@@ -215,6 +259,7 @@ MultiButtonResponseEditor.propTypes = {
     value: PropTypes.shape({
         buttons: PropTypes.array,
         prompt: PropTypes.string,
+        recallId: PropTypes.string,
         required: PropTypes.bool,
         responseId: PropTypes.string,
         type: PropTypes.oneOf([type])
