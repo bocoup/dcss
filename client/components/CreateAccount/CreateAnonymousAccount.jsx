@@ -36,12 +36,12 @@ class CreateAnonymousAccount extends Component {
 
     async generateUnusedAnonymousUsername() {
         const username = anonymousUsername();
-        try {
-            await fetch(`/api/auth/signup/usernames/${username}/exists`);
-        } catch (error) {
-            if (error) {
-                return await this.generateUnusedAnonymousUsername();
-            }
+        const { status } = await (await fetch(
+            `/api/auth/signup/usernames/${username}/exists`
+        )).json();
+
+        if (status === 409) {
+            return await this.generateUnusedAnonymousUsername();
         }
 
         if (username) {
