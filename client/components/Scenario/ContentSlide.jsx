@@ -31,7 +31,9 @@ class ContentSlide extends React.Component {
         };
 
         this.onSkip = this.onSkip.bind(this);
-        this.onResponseChange = this.onResponseChange.bind(this);
+        this.onInterceptResponseChange = this.onInterceptResponseChange.bind(
+            this
+        );
     }
 
     onSkip(event) {
@@ -56,7 +58,7 @@ class ContentSlide extends React.Component {
         onClickNext();
     }
 
-    onResponseChange(event, data) {
+    onInterceptResponseChange(event, data) {
         const { name, value } = data;
         const { pending, required } = this.state;
 
@@ -64,16 +66,12 @@ class ContentSlide extends React.Component {
         // was marked required, and the value isn't empty,
         // then it can be removed from the list.
         if (required.includes(name)) {
-            if (value !== '') {
-                if (pending.includes(name)) {
-                    pending.splice(pending.indexOf(name), 1);
-                }
+            if (value !== '' && pending.includes(name)) {
+                pending.splice(pending.indexOf(name), 1);
             } else {
                 // Otherwise, if it is not empty, but was
                 // previously removed, add it back.
-                if (!pending.includes(name)) {
-                    pending.push(name);
-                }
+                pending.push(name);
             }
         }
 
@@ -90,7 +88,7 @@ class ContentSlide extends React.Component {
             run,
             slide
         } = this.props;
-        const { onResponseChange, onSkip } = this;
+        const { onInterceptResponseChange, onSkip } = this;
         const cardClass = run ? 'scenario__card--run' : 'scenario__card';
         const runOnly = run ? { run } : {};
         const hasPrompt = slide.components.some(
@@ -134,7 +132,7 @@ class ContentSlide extends React.Component {
                     <SlideComponentsList
                         {...runOnly}
                         components={slide.components}
-                        onResponseChange={onResponseChange}
+                        onResponseChange={onInterceptResponseChange}
                     />
                     <Popup
                         content="Go back to the previous slide"
@@ -161,7 +159,7 @@ class ContentSlide extends React.Component {
                                         <Button
                                             color="yellow"
                                             onClick={onSkip}
-                                            content="Skip"
+                                            content="Choose to Skip"
                                         />
                                     }
                                 />
