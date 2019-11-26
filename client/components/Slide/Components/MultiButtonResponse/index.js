@@ -1,7 +1,7 @@
 import { type } from './type';
 export { type };
 export const defaultValue = ({ responseId }) => ({
-    required: false,
+    required: true,
     responseId,
     type
 });
