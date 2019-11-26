@@ -79,7 +79,7 @@ class Login extends Component {
             Session.create({ username, timeout: Date.now() });
             // Step outside of react to force a real reload
             // after login and session create
-            location.href = from ? from : '/';
+            location.href = from ? from.pathname : '/';
         }
     }
 
