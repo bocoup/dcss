@@ -68,7 +68,7 @@ Display.propTypes = {
     // from being mis-indentified as a "Response" component.
     recallId: PropTypes.string,
     run: PropTypes.object,
-    type: PropTypes.oneOf([type]).isRequired
+    type: PropTypes.oneOf([type])
 };
 
 export default React.memo(Display);
