@@ -97,10 +97,12 @@ class Display extends Component {
 
     onChange(event, data) {
         const { created_at } = this;
+        const { recallId } = this.props;
         this.props.onResponseChange(event, {
             ...data,
             created_at,
             ended_at: new Date().toISOString(),
+            recallId,
             type
         });
     }
@@ -121,6 +123,7 @@ class Display extends Component {
 
         return this.browserSupported ? (
             <Segment>
+                <Header as="h3">{header}</Header>
                 {recallId && <ResponseRecall run={run} recallId={recallId} />}
                 {!isRecording && (
                     <Button basic toggle onClick={this.onStart}>
@@ -143,8 +146,6 @@ class Display extends Component {
                 {this.state.blobURL && (
                     <audio src={this.state.blobURL} controls="controls" />
                 )}
-
-                {header}
             </Segment>
         ) : (
             <Segment>
