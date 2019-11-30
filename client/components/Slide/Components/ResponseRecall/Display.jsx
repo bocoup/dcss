@@ -58,7 +58,12 @@ class Display extends React.Component {
                 : 'Loading your previous response'
             : 'Participant response will appear here';
 
-        return <Message style={{ whiteSpace: 'pre-wrap' }} content={content} />;
+
+        return content.endsWith('mp3') ? (
+            <audio src={content} controls="controls" />
+        ) : (
+            <Message style={{ whiteSpace: 'pre-wrap' }} content={content} />;
+        );
     }
 }
 
