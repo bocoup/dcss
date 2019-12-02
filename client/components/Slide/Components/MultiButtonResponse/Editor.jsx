@@ -14,6 +14,7 @@ import { type } from './type';
 import Sortable from 'react-sortablejs';
 import EditorMenu from '@components/EditorMenu';
 import ResponseRecall from '@components/Slide/Components/ResponseRecall/Editor';
+import '@components/Slide/SlideEditor/SlideEditor.css';
 
 class MultiButtonResponseEditor extends React.Component {
     constructor(props) {
@@ -164,7 +165,7 @@ class MultiButtonResponseEditor extends React.Component {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
                         <ResponseRecall
-                            style={{ marginBottom: '1rem' }}
+                            className="responserecall__margin-bottom"
                             value={{
                                 components: [],
                                 recallId

@@ -4,6 +4,7 @@ import { Accordion, Checkbox, Container, Form, Icon } from 'semantic-ui-react';
 import { type } from './type';
 import ResponseRecall from '@components/Slide/Components/ResponseRecall/Editor';
 import './TextResponse.css';
+import '@components/Slide/SlideEditor/SlideEditor.css';
 
 class TextResponseEditor extends React.Component {
     constructor(props) {
@@ -60,7 +61,7 @@ class TextResponseEditor extends React.Component {
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === 0}>
                             <ResponseRecall
-                                style={{ marginBottom: '1rem' }}
+                                className="responserecall__margin-bottom"
                                 value={{
                                     components: [],
                                     recallId

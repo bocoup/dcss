@@ -13,6 +13,7 @@ import {
 import { type } from './type';
 import ResponseRecall from '@components/Slide/Components/ResponseRecall/Editor';
 import './AudioResponse.css';
+import '@components/Slide/SlideEditor/SlideEditor.css';
 
 class AudioResponseEditor extends Component {
     constructor(props) {
@@ -78,7 +79,7 @@ class AudioResponseEditor extends Component {
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === 0}>
                             <ResponseRecall
-                                style={{ marginBottom: '1rem' }}
+                                className="responserecall__margin-bottom"
                                 value={{
                                     recallId
                                 }}
