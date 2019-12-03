@@ -22,7 +22,6 @@ import {
     setCohort,
     createCohort
 } from '@client/actions/cohort';
-import { initialState } from '@client/reducers/cohort';
 import { getScenarios } from '@client/actions/scenario';
 import CohortCard from './CohortCard';
 import CohortEmpty from './CohortEmpty';
@@ -38,14 +37,11 @@ export class Cohorts extends React.Component {
 
         this.state = {
             createIsVisible: false,
-            cohort: new CohortEmpty({
-                ...initialState,
-                id
-            })
+            cohort: new CohortEmpty({ id })
         };
 
         this.onCancelCreateCohort = this.onCancelCreateCohort.bind(this);
-        this.onChangeCorhortName = this.onChangeCorhortName.bind(this);
+        this.onChangeCohortName = this.onChangeCohortName.bind(this);
         this.onClickOpenCreateCohort = this.onClickOpenCreateCohort.bind(this);
         this.onSubmitCreateCohort = this.onSubmitCreateCohort.bind(this);
     }
@@ -69,7 +65,7 @@ export class Cohorts extends React.Component {
         this.setState({ createIsVisible: false });
     }
 
-    onChangeCorhortName(event, { name, value }) {
+    onChangeCohortName(event, { name, value }) {
         this.setState({ cohort: { [name]: value } });
     }
 
@@ -82,15 +78,10 @@ export class Cohorts extends React.Component {
         const { cohort, createIsVisible } = this.state;
         const {
             onCancelCreateCohort,
-            onChangeCorhortName,
+            onChangeCohortName,
             onClickOpenCreateCohort,
             onSubmitCreateCohort
         } = this;
-
-        const style = {
-            paddingTop: '0.25rem',
-            paddingBottom: '0.25rem'
-        };
 
         const lookupCohort = id =>
             scenarios.find(scenario => scenario.id === id);
@@ -105,7 +96,7 @@ export class Cohorts extends React.Component {
                                 key="menu-item-create-cohort"
                                 name="Create a cohort"
                                 onClick={onClickOpenCreateCohort}
-                                style={style}
+                                className="cohort__menu-item--padding"
                             >
                                 <Icon.Group>
                                     <Icon name="group" />
@@ -195,7 +186,7 @@ export class Cohorts extends React.Component {
                                     placeholder="Enter a name for your cohort"
                                     name="name"
                                     value={cohort.name}
-                                    onChange={onChangeCorhortName}
+                                    onChange={onChangeCohortName}
                                     onSubmit={onSubmitCreateCohort}
                                 />
                             </Form>

@@ -130,26 +130,15 @@ exports.setCohortScenarios = async ({ id, scenarios }) => {
     return await withClientTransaction(async client => {
         await client.query(sql`
             DELETE FROM cohort_scenario
-            WHERE cohort_id = ${id};
+            WHERE cohort_id = ${Number(id)};
         `);
 
         for (const scenario_id of scenarios) {
             await client.query(sql`
                 INSERT INTO cohort_scenario (cohort_id, scenario_id)
-                VALUES (${id}, ${scenario_id});
+                VALUES (${Number(id)}, ${Number(scenario_id)});
             `);
         }
-        //
-        // Why doesn't this work?
-        //
-        // const values = scenarios.map(scenario_id => `(${id}, ${scenario_id})`);
-        // await client.query(sql`
-        //     INSERT INTO cohort_scenario (cohort_id, scenario_id)
-        //     VALUES ${values.join(',')}
-        //     ;
-        // `);
-        //
-
         return scenarios;
     });
 };

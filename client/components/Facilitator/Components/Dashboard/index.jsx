@@ -15,10 +15,10 @@ class Dashboard extends React.Component {
                     <Cohorts />
                 </Grid.Column>
                 <Grid.Column width={9}>
-                    <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
+                    <Image src="/images/wireframe/paragraph.png" />
                 </Grid.Column>
                 <Grid.Column width={3}>
-                    <Image src="https://react.semantic-ui.com/images/wireframe/media-paragraph.png" />
+                    <Image src="/images/wireframe/media-paragraph.png" />
                 </Grid.Column>
             </Grid>
         );

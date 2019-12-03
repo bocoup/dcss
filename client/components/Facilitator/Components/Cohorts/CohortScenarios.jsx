@@ -214,7 +214,7 @@ export class CohortScenarios extends React.Component {
                         <Dimmer active>
                             <Loader />
                         </Dimmer>
-                        <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
+                        <Image src="/images/wireframe/short-paragraph.png" />
                     </React.Fragment>
                 )}
             </Container>

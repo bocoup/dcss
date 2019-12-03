@@ -25,3 +25,8 @@
 .cohort__button-transparent {
     background: none !important;
 }
+
+.cohort__menu-item--padding {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}

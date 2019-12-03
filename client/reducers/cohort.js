@@ -21,7 +21,7 @@ import {
     // GET_USER_COHORTS_ERROR
 } from '../actions/types';
 
-export const initialState = {
+const initialState = {
     id: null,
     created_at: '',
     name: '',

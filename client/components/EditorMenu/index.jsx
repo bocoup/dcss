@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon, Menu, Popup, Search } from 'semantic-ui-react';
 import ConfirmableDeleteButton from './ConfirmableDeleteButton';
 import _ from 'lodash';
+import './EditorMenu.css';
 
 const initialSearchState = {
     isLoading: false,
@@ -22,11 +23,15 @@ export default class EditorMenu extends React.Component {
             }
         };
 
-        this.onResultSelect = this.onResultSelect.bind(this);
-        this.onSearchChange = this.onSearchChange.bind(this);
+        this.onEditorMenuResultSelect = this.onEditorMenuResultSelect.bind(
+            this
+        );
+        this.onEditorMenuSearchChange = this.onEditorMenuSearchChange.bind(
+            this
+        );
     }
 
-    onResultSelect(event, { result }) {
+    onEditorMenuResultSelect(event, { result }) {
         const { results } = this.state.search;
 
         this.setState(
@@ -49,7 +54,7 @@ export default class EditorMenu extends React.Component {
         );
     }
 
-    onSearchChange(event, { value }) {
+    onEditorMenuSearchChange(event, { value }) {
         const { results, selected } = this.state.search;
 
         const search = {
@@ -86,7 +91,7 @@ export default class EditorMenu extends React.Component {
     render() {
         const { type, items } = this.props;
         const { mode, search } = this.state;
-        const { onResultSelect, onSearchChange } = this;
+        const { onEditorMenuResultSelect, onEditorMenuSearchChange } = this;
 
         return (
             <Menu icon>
@@ -184,17 +189,14 @@ export default class EditorMenu extends React.Component {
                             <Menu.Item
                                 aria-label={`Search ${type}`}
                                 name={`search-${type}`}
-                                style={{
-                                    paddingTop: '0.25rem',
-                                    paddingBottom: '0.25rem'
-                                }}
+                                className="editormenu__search--padding"
                             >
                                 <Search
                                     loading={search.isLoading}
                                     resultRenderer={items.search.renderer}
-                                    onResultSelect={onResultSelect}
+                                    onResultSelect={onEditorMenuResultSelect}
                                     onSearchChange={_.debounce(
-                                        onSearchChange,
+                                        onEditorMenuSearchChange,
                                         500,
                                         {
                                             leading: true
@@ -275,13 +277,13 @@ EditorMenu.propTypes = {
 
             if (items.search) {
                 if (
-                    !Object.keys(items.search).every(v =>
+                    !Object.keys(items.search).every(key =>
                         [
                             'onResultSelect',
                             'onSearchChange',
                             'renderer',
                             'source'
-                        ].includes(v)
+                        ].includes(key)
                     )
                 ) {
                     return new Error(

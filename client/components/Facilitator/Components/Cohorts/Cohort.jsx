@@ -85,7 +85,7 @@ export class Cohort extends React.Component {
                         <Dimmer active>
                             <Loader />
                         </Dimmer>
-                        <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
+                        <Image src="/short-paragraph.png" />
                     </React.Fragment>
                 );
             case 'runs':
