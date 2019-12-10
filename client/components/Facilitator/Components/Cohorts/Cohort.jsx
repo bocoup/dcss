@@ -12,7 +12,6 @@ import {
 import { getScenarios } from '@client/actions/scenario';
 import ConfirmAuth from '@client/components/ConfirmAuth';
 import CohortDataTable from './CohortDataTable';
-import CohortDataTableMenu from './CohortDataTableMenu';
 import CohortParticipants from './CohortParticipants';
 import CohortScenarios from './CohortScenarios';
 import './Cohort.css';
@@ -51,8 +50,7 @@ export class Cohort extends React.Component {
 
         this.onClick = this.onClick.bind(this);
         // TODO: This will be used in a follow up changeset
-        // this.onDataTableClick = this.onDataTableClick.bind(this);
-        this.onDataTableMenuClick = this.onDataTableMenuClick.bind(this);
+        this.onDataTableClick = this.onDataTableClick.bind(this);
         this.onTabClick = this.onTabClick.bind(this);
     }
 
@@ -119,15 +117,15 @@ export class Cohort extends React.Component {
         this.setState({ activeTabKey });
     }
 
-    onDataTableMenuClick(event, { name, key }) {
+    onDataTableClick(event, { name, key }) {
         const { tabs } = this.state;
 
         // If the button name was "close"...
         if (name === 'close') {
-            // 1. Move to the main cohort tab
+            // Move to the main cohort tab
             this.setState({ activeTabKey: 'cohort' });
 
-            // 2. Remove the tab from the tabs list
+            // Remove the tab from the tabs list
             tabs.splice(
                 tabs.indexOf(tabs.find(tab => tab.menuItem.key === key)),
                 1
@@ -136,23 +134,13 @@ export class Cohort extends React.Component {
         }
     }
 
-    // TODO: This will be used in a follow up changeset
-    // onDataTableClick(event, props) {
-    //     // console.log('onDataTableClick', props);
-    // }
-
     render() {
         const {
             cohort,
             cohort: { id, name }
         } = this.props;
         const { activeTabKey, tabs } = this.state;
-        const {
-            onClick,
-            onTabClick,
-            onDataTableClick,
-            onDataTableMenuClick
-        } = this;
+        const { onClick, onTabClick, onDataTableClick } = this;
         const cohortUrl = `${location.origin}/cohort/${cohort.id}`;
         const source = tabs.find(tab => tab.menuItem.key === activeTabKey);
         return (
@@ -247,10 +235,6 @@ export class Cohort extends React.Component {
                     </Segment>
                 ) : (
                     <Segment key={activeTabKey} attached="bottom">
-                        <CohortDataTableMenu
-                            source={source && source.data}
-                            onClick={onDataTableMenuClick}
-                        />
                         <CohortDataTable
                             source={source && source.data}
                             onClick={onDataTableClick}

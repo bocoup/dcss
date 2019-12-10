@@ -14,7 +14,12 @@ import {
 import { diff } from 'deep-diff';
 import { getCohort, getCohortData } from '@client/actions/cohort';
 import { getScenarios } from '@client/actions/scenario';
+import CohortDataTableMenu from './CohortDataTableMenu';
 import './CohortDataTable.css';
+
+function isAudioFile(input) {
+    return /^audio\/\d.+\/AudioResponse/.test(input) && input.endsWith('.mp3');
+}
 
 export class CohortDataTable extends React.Component {
     constructor(props) {
@@ -37,6 +42,7 @@ export class CohortDataTable extends React.Component {
         this.detailOpen = this.detailOpen.bind(this);
         this.detailClose = this.detailClose.bind(this);
         this.refresh = this.refresh.bind(this);
+        this.onDataTableMenuClick = this.onDataTableMenuClick.bind(this);
     }
 
     async componentDidMount() {
@@ -51,10 +57,6 @@ export class CohortDataTable extends React.Component {
 
         if (scenarioId || participantId) {
             await this.refresh();
-
-            this.refreshInterval = setInterval(async () => {
-                await this.refresh();
-            }, 1000);
         }
     }
 
@@ -144,7 +146,10 @@ export class CohortDataTable extends React.Component {
                         rows.push([scenario, ...Object.values(reduced)]);
                     }
 
-                    tables.push({ headers: headers.length && headers[0], rows });
+                    tables.push({
+                        headers: headers.length && headers[0],
+                        rows
+                    });
                 }
             }
         }
@@ -179,10 +184,6 @@ export class CohortDataTable extends React.Component {
         this.setState(newState);
     }
 
-    async componentWillUnmount() {
-        clearInterval(this.refreshInterval);
-    }
-
     detailClose() {
         const {
             detail: { subject, prompt, response }
@@ -209,154 +210,195 @@ export class CohortDataTable extends React.Component {
         });
     }
 
+    onDataTableMenuClick(event, props) {
+        if (props.name === 'close') {
+            this.props.onClick(event, props);
+        }
+
+        if (props.name === 'refresh') {
+            this.refresh();
+        }
+    }
+
     render() {
         const { detail, isScenarioDataTable, tables } = this.state;
-        const { detailOpen, detailClose } = this;
+        const { source } = this.props;
+        const { detailOpen, detailClose, onDataTableMenuClick } = this;
         const leftColHeader = isScenarioDataTable ? 'Participant' : 'Scenario';
-        return tables.length ? (
+        return (
             <React.Fragment>
-                {tables.map(({ headers, rows }, index) => {
-                    const tableKeyBase = `data-table-${index}`;
-                    return (
-                        <div
-                            key={`${tableKeyBase}-container`}
-                            className="cohortdatatable__scroll"
-                        >
-                            <Table
-                                key={`${tableKeyBase}-table`}
-                                celled
-                                striped
-                                selectable
-                                role="grid"
-                            >
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell scope="col" />
-                                        <Table.HeaderCell
-                                            scope="col"
-                                            colSpan={headers.length}
-                                        >
-                                            Prompts & Responses
-                                        </Table.HeaderCell>
-                                    </Table.Row>
-                                    <Table.Row>
-                                        <Table.HeaderCell scope="col">
-                                            {leftColHeader}
-                                        </Table.HeaderCell>
-                                        {headers.map(({ prompt }, index) => {
-                                            return (
+                <CohortDataTableMenu
+                    source={source}
+                    onClick={onDataTableMenuClick}
+                />
+                {tables.length ? (
+                    <React.Fragment>
+                        {tables.map(({ headers, rows }, index) => {
+                            const tableKeyBase = `data-table-${index}`;
+                            return (
+                                <div
+                                    key={`${tableKeyBase}-container`}
+                                    className="cohortdatatable__scroll"
+                                >
+                                    <Table
+                                        key={`${tableKeyBase}-table`}
+                                        celled
+                                        striped
+                                        selectable
+                                        role="grid"
+                                    >
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell scope="col" />
                                                 <Table.HeaderCell
-                                                    key={`${tableKeyBase}-prompt-${index}`}
                                                     scope="col"
+                                                    colSpan={headers.length}
                                                 >
-                                                    {prompt}
+                                                    Prompts & Responses
                                                 </Table.HeaderCell>
-                                            );
-                                        })}
-                                    </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                    {rows.map((cells, index) => {
-                                        const rowKeyBase = `${tableKeyBase}-row-${index}`;
-                                        const first = cells.shift() || {};
-                                        return (
-                                            first && (
-                                                <Table.Row key={rowKeyBase}>
-                                                    <Table.HeaderCell>
-                                                        {first.username ||
-                                                            first.title}
-                                                    </Table.HeaderCell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.HeaderCell scope="col">
+                                                    {leftColHeader}
+                                                </Table.HeaderCell>
+                                                {headers.map(
+                                                    ({ prompt }, index) => {
+                                                        return (
+                                                            <Table.HeaderCell
+                                                                key={`${tableKeyBase}-prompt-${index}`}
+                                                                scope="col"
+                                                            >
+                                                                {prompt}
+                                                            </Table.HeaderCell>
+                                                        );
+                                                    }
+                                                )}
+                                            </Table.Row>
+                                        </Table.Header>
+                                        <Table.Body>
+                                            {rows.map((cells, index) => {
+                                                const rowKeyBase = `${tableKeyBase}-row-${index}`;
+                                                const first =
+                                                    cells.shift() || {};
+                                                return (
+                                                    first && (
+                                                        <Table.Row
+                                                            key={rowKeyBase}
+                                                        >
+                                                            <Table.HeaderCell>
+                                                                {first.username ||
+                                                                    first.title}
+                                                            </Table.HeaderCell>
 
-                                                    {cells.map(
-                                                        (response, index) => {
-                                                            const cellKey = `${rowKeyBase}-cell-${index}`;
-                                                            const content = response
-                                                                ? response.isSkip
-                                                                    ? '(skipped)'
-                                                                    : response.value
-                                                                : '';
-                                                            const className =
-                                                                content === ''
-                                                                    ? 'cohortdatatable__cell-data-missing'
-                                                                    : '';
-                                                            const onCellClick = event =>
-                                                                detailOpen(
-                                                                    event,
-                                                                    {
-                                                                        name:
-                                                                            'detail',
-                                                                        subject:
-                                                                            first.username ||
-                                                                            first.title,
-                                                                        prompt:
-                                                                            headers[
-                                                                                index
-                                                                            ]
-                                                                                .prompt,
-                                                                        response: content
-                                                                    }
-                                                                );
-                                                            return (
-                                                                <Table.Cell
-                                                                    className={
-                                                                        className
-                                                                    }
-                                                                    key={
-                                                                        cellKey
-                                                                    }
-                                                                    name="cell"
-                                                                    onClick={
-                                                                        onCellClick
-                                                                    }
-                                                                    style={{
-                                                                        cursor:
-                                                                            'pointer'
-                                                                    }}
-                                                                >
-                                                                    {content.substring(
-                                                                        0,
-                                                                        100
-                                                                    )}
-                                                                </Table.Cell>
-                                                            );
-                                                        }
-                                                    )}
-                                                </Table.Row>
-                                            )
-                                        );
-                                    })}
-                                </Table.Body>
-                            </Table>
-                        </div>
-                    );
-                })}
-                <Modal
-                    closeIcon
-                    key="detail-modal"
-                    onClose={detailClose}
-                    open={detail.open}
-                    size="tiny"
-                >
-                    <Modal.Header>
-                        Prompt & Response from <code>{detail.subject}</code>
-                    </Modal.Header>
-                    <Modal.Content scrolling>
-                        <Modal.Description>
-                            <Header>{detail.prompt}</Header>
-                            <p>{detail.response}</p>
-                        </Modal.Description>
-                    </Modal.Content>
-                    <Modal.Actions />
-                </Modal>
+                                                            {cells.map(
+                                                                (
+                                                                    response,
+                                                                    index
+                                                                ) => {
+                                                                    const cellKey = `${rowKeyBase}-cell-${index}`;
+
+                                                                    const content = response
+                                                                        ? response.isSkip
+                                                                            ? '(skipped)'
+                                                                            : response.value
+                                                                        : '';
+
+                                                                    const display = isAudioFile(
+                                                                        content
+                                                                    ) ? (
+                                                                            <audio
+                                                                                src={`/api/media/${content}`}
+                                                                                controls="controls"
+                                                                            />
+                                                                        ) : (
+                                                                            content
+                                                                        );
+
+                                                                    const className =
+                                                                        content ===
+                                                                        ''
+                                                                            ? 'cohortdatatable__cell-data-missing'
+                                                                            : '';
+                                                                    const onCellClick = event =>
+                                                                        detailOpen(
+                                                                            event,
+                                                                            {
+                                                                                name:
+                                                                                    'detail',
+                                                                                subject:
+                                                                                    first.username ||
+                                                                                    first.title,
+                                                                                prompt:
+                                                                                    headers[
+                                                                                        index
+                                                                                    ]
+                                                                                        .prompt,
+                                                                                response: display
+                                                                            }
+                                                                        );
+                                                                    return (
+                                                                        <Table.Cell
+                                                                            className={
+                                                                                className
+                                                                            }
+                                                                            key={
+                                                                                cellKey
+                                                                            }
+                                                                            name="cell"
+                                                                            onClick={
+                                                                                onCellClick
+                                                                            }
+                                                                            style={{
+                                                                                cursor:
+                                                                                    'pointer'
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                display
+                                                                            }
+                                                                        </Table.Cell>
+                                                                    );
+                                                                }
+                                                            )}
+                                                        </Table.Row>
+                                                    )
+                                                );
+                                            })}
+                                        </Table.Body>
+                                    </Table>
+                                </div>
+                            );
+                        })}
+                        <Modal
+                            closeIcon
+                            key="detail-modal"
+                            onClose={detailClose}
+                            open={detail.open}
+                            size="tiny"
+                        >
+                            <Modal.Header>
+                                Prompt & Response from{' '}
+                                <code>{detail.subject}</code>
+                            </Modal.Header>
+                            <Modal.Content scrolling>
+                                <Modal.Description>
+                                    <Header>{detail.prompt}</Header>
+                                    <p>{detail.response}</p>
+                                </Modal.Description>
+                            </Modal.Content>
+                            <Modal.Actions />
+                        </Modal>
+                    </React.Fragment>
+                ) : (
+                    <Segment>
+                        <Dimmer active>
+                            <Loader />
+                        </Dimmer>
+
+                        <Image src="/images/wireframe/short-paragraph.png" />
+                    </Segment>
+                )}
             </React.Fragment>
-        ) : (
-            <Segment>
-                <Dimmer active>
-                    <Loader />
-                </Dimmer>
-
-                <Image src="/images/wireframe/short-paragraph.png" />
-            </Segment>
         );
     }
 }

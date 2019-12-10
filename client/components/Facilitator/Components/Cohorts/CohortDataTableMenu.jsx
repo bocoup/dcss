@@ -15,11 +15,17 @@ export class CohortDataTableMenu extends React.Component {
     }
 
     onClick(event, { name }) {
-        const { cohortId, scenarioId } = this.props.source;
+        const { cohortId, scenarioId, participantId } = this.props.source;
+
+        const sourceKey = scenarioId
+            ? `scenario-${scenarioId}`
+            : `participant-${participantId}`;
+
+        const key = `cohort-${cohortId}-${sourceKey}`;
 
         this.props.onClick(event, {
             name,
-            key: `cohort-${cohortId}-scenario-${scenarioId}`
+            key
         });
     }
 
@@ -33,6 +39,14 @@ export class CohortDataTableMenu extends React.Component {
                     trigger={
                         <Menu.Item name="close" onClick={onClick}>
                             <Icon name="close" />
+                        </Menu.Item>
+                    }
+                />
+                <Popup
+                    content="Refresh this data"
+                    trigger={
+                        <Menu.Item name="refresh" onClick={onClick}>
+                            <Icon name="refresh" />
                         </Menu.Item>
                     }
                 />
