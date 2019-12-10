@@ -61,15 +61,14 @@ class ScenarioEditor extends Component {
                 categories: [],
                 status: 1
             });
+        } else {
+            this.props.getScenario(this.props.scenarioId);
         }
     }
 
     async componentDidMount() {
         const categories = await (await fetch('/api/tags/categories')).json();
         this.setState({ categories });
-        if (this.props.scenarioId !== 'new') {
-            await this.props.getScenario(this.props.scenarioId);
-        }
     }
 
     onChange(event, { name, value }) {
@@ -195,6 +194,12 @@ class ScenarioEditor extends Component {
             scenarioId,
             title
         } = this.props;
+
+        // Stop letting the editor load before the
+        // finish slide is available.
+        if (!finish.components[0]) {
+            return null;
+        }
 
         const consentAgreementValue = {
             type: 'Text',

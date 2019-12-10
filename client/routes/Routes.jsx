@@ -24,6 +24,12 @@ import {
     ScenariosListOfficial
 } from './RouteComponents';
 
+const makeEditorProps = props => ({
+    ...props,
+    activeSlideIndex: Number(props.match.params.index || 0),
+    scenarioId: props.match.params.id
+});
+
 const Routes = () => {
     return (
         <Switch>
@@ -100,10 +106,100 @@ const Routes = () => {
                 <Route component={NewScenario} />
             </ConfirmAuth>
             <ConfirmAuth
-                path="/editor/:id"
+                path="/editor/copy/:id"
                 requiredPermission="create_scenario"
             >
                 <Route component={Editor} />
+            </ConfirmAuth>
+            <ConfirmAuth
+                path="/editor/:id/scenario"
+                requiredPermission="create_scenario"
+            >
+                <Route
+                    render={props => {
+                        return (
+                            <Editor
+                                {...makeEditorProps(props)}
+                                activeTab="scenario"
+                            />
+                        );
+                    }}
+                />
+            </ConfirmAuth>
+            <ConfirmAuth
+                path="/editor/:id/slides/:activeSlideIndex"
+                requiredPermission="create_scenario"
+            >
+                <Route
+                    render={props => {
+                        return (
+                            <Editor
+                                {...makeEditorProps(props)}
+                                activeTab="slides"
+                            />
+                        );
+                    }}
+                />
+            </ConfirmAuth>
+            <ConfirmAuth
+                path="/editor/:id/slides"
+                requiredPermission="create_scenario"
+            >
+                <Route
+                    render={props => {
+                        return (
+                            <Editor
+                                {...makeEditorProps(props)}
+                                activeTab="slides"
+                            />
+                        );
+                    }}
+                />
+            </ConfirmAuth>
+            <ConfirmAuth
+                path="/editor/:id/preview/:activeSlideIndex"
+                requiredPermission="create_scenario"
+            >
+                <Route
+                    render={props => {
+                        return (
+                            <Editor
+                                {...makeEditorProps(props)}
+                                activeTab="preview"
+                            />
+                        );
+                    }}
+                />
+            </ConfirmAuth>
+            <ConfirmAuth
+                path="/editor/:id/preview"
+                requiredPermission="create_scenario"
+            >
+                <Route
+                    render={props => {
+                        return (
+                            <Editor
+                                {...makeEditorProps(props)}
+                                activeTab="preview"
+                            />
+                        );
+                    }}
+                />
+            </ConfirmAuth>
+            <ConfirmAuth
+                path="/editor/:id"
+                requiredPermission="create_scenario"
+            >
+                <Route
+                    render={props => {
+                        return (
+                            <Editor
+                                {...makeEditorProps(props)}
+                                activeTab="scenario"
+                            />
+                        );
+                    }}
+                />
             </ConfirmAuth>
             <ConfirmAuth path="/researcher" requiredPermission="view_run_data">
                 <Route component={Researcher} />
