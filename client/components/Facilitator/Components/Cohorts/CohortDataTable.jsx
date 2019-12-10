@@ -133,18 +133,19 @@ export class CohortDataTable extends React.Component {
             const { scenarios } = this.props.cohort;
             // eslint-disable-next-line require-atomic-updates
             for (const scenarioId of scenarios) {
-                const rows = [];
-                const headers = prompts[scenarioId] || [[]];
-                const scenario = this.props.scenarios.find(
-                    scenario => scenario.id === scenarioId
-                );
-                const reduced = responsesReduced[scenarioId];
-                if (reduced) {
-                    const row = [scenario, ...Object.values(reduced)];
-                    rows.push(row);
-                }
+                if (prompts[scenarioId]) {
+                    const rows = [];
+                    const headers = prompts[scenarioId] || [[]];
+                    const scenario = this.props.scenarios.find(
+                        scenario => scenario.id === scenarioId
+                    );
+                    const reduced = responsesReduced[scenarioId];
+                    if (reduced) {
+                        rows.push([scenario, ...Object.values(reduced)]);
+                    }
 
-                tables.push({ headers: headers.length && headers[0], rows });
+                    tables.push({ headers: headers.length && headers[0], rows });
+                }
             }
         }
 
