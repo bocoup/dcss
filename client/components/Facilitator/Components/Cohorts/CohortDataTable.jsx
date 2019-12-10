@@ -303,16 +303,18 @@ export class CohortDataTable extends React.Component {
                                                                             : response.value
                                                                         : '';
 
-                                                                    const display = isAudioFile(
+                                                                    const isAudioContent = isAudioFile(
                                                                         content
-                                                                    ) ? (
-                                                                            <audio
-                                                                                src={`/api/media/${content}`}
-                                                                                controls="controls"
-                                                                            />
-                                                                        ) : (
-                                                                            content
-                                                                        );
+                                                                    );
+
+                                                                    const display = isAudioContent ? (
+                                                                        <audio
+                                                                            src={`/api/media/${content}`}
+                                                                            controls="controls"
+                                                                        />
+                                                                    ) : (
+                                                                        content
+                                                                    );
 
                                                                     const className =
                                                                         content ===
