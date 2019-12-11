@@ -115,7 +115,7 @@ class ContentSlide extends React.Component {
     }
 
     render() {
-        const { pending, skipButton, skipOrKeep } = this.state;
+        const { pending, required, skipButton, skipOrKeep } = this.state;
         const {
             isLastSlide,
             onClickNext,
@@ -139,6 +139,7 @@ class ContentSlide extends React.Component {
             </React.Fragment>
         );
 
+        const hasRequiredFields = !!required.length;
         const color = pending.length ? 'red' : 'green';
         const content = pending.length
             ? awaitingRequiredPrompts
@@ -150,7 +151,10 @@ class ContentSlide extends React.Component {
             content,
             onClick
         };
-        let fwdButtonTip = 'Submit response and go to next slide';
+        let fwdButtonTip = hasPrompt
+            ? 'Submit response and go to next slide'
+            : 'Go to the next slide';
+
         let skipButtonTip =
             skipOrKeep === 'skip'
                 ? 'Skip these prompts and go to next slide'
@@ -165,8 +169,8 @@ class ContentSlide extends React.Component {
         if (isLastSlide) {
             skipButtonContent =
                 skipOrKeep === 'skip' ? 'Skip and finish' : 'Keep and finish';
-            skipButtonTip = skipButtonTip.replace('go to next slide', 'finish');
-            fwdButtonTip = fwdButtonTip.replace('go to next slide', 'finish');
+            skipButtonTip = 'Skip these prompts and finish';
+            fwdButtonTip = 'Finish';
         }
 
         return (
@@ -198,7 +202,7 @@ class ContentSlide extends React.Component {
                             content={fwdButtonTip}
                             trigger={<Button {...fwdButtonProps} />}
                         />
-                        {hasPrompt && (
+                        {hasPrompt && !hasRequiredFields && (
                             <React.Fragment>
                                 <Button.Or />
                                 <Popup
