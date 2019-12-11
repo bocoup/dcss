@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Card, Icon, Popup } from 'semantic-ui-react';
+import storage from 'local-storage-fallback';
 
 import SlideComponentsList from '@components/SlideComponentsList';
 
@@ -101,7 +102,7 @@ class ContentSlide extends React.Component {
 
         if (!data.isFulfilled) {
             this.props.onResponseChange(event, data);
-            localStorage.setItem(name, JSON.stringify(data));
+            storage.setItem(name, JSON.stringify(data));
             this.setState({
                 skipButton: 'Choose to skip',
                 skipOrKeep: 'skip'
