@@ -38,8 +38,8 @@ export const setResponses = (id, responses) => async dispatch => {
                 body: JSON.stringify(body)
             });
 
-            if (storage[name]) {
-                storage.removeItem(name);
+            if (storage[`${id}-${name}`]) {
+                storage.removeItem(`${id}-${name}`);
             }
         }
 

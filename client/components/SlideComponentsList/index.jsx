@@ -58,7 +58,7 @@ const SlideComponentsList = ({
             const { Display } = Components[type];
             const persisted = JSON.parse(
                 run && responseId
-                    ? storage.getItem(responseId) || emptyValue
+                    ? storage.getItem(`${run.id}-${responseId}`) || emptyValue
                     : emptyValue
             );
             return (
