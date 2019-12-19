@@ -35,7 +35,7 @@ class AccountAdmin extends Component {
 
         return (
             <React.Fragment>
-                <h1>Account Admin</h1>
+                <h1>Account Administration</h1>
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
