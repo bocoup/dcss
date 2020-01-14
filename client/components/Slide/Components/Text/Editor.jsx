@@ -25,7 +25,7 @@ class TextEditor extends React.Component {
         const hasWrapper = /^(<.+>.*<\/.+>)$/gm.test(defaultHtml);
         const defaultValue = convertFromHTML(
             hasWrapper ? defaultHtml : `<p>${defaultHtml}</p>`
-        );
+        ).replace(/<br ><br><\/br>/gm, '<br>');
 
         this.onChange = this.onChange.bind(this);
         this.state = {
