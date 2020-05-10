@@ -23,9 +23,15 @@ const app = express();
 const port = process.env.PORT || 5000;
 const poolConfig = getDbConfig();
 
+
+app.get('/', function (req, res) {
+  res.send('Hello!');
+});
+
 app.use(bodyParser.json());
 app.use(cors());
 
+console.log("process.env['SESSION_SECRET']?", process.env['SESSION_SECRET']);
 app.use(
     session({
         secret: process.env['SESSION_SECRET'] || 'mit tsl teacher moments',
@@ -38,16 +44,26 @@ app.use(
         cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
     })
 );
+console.log("poolConfig?", poolConfig);
 
 app.use('/auth', authRouter);
+console.log("app.use('/auth', authRouter);");
 app.use('/cohort', cohortRouter);
+console.log("app.use('/cohort', cohortRouter);");
 app.use('/media', mediaRouter);
+console.log("app.use('/media', mediaRouter);");
 app.use('/roles', rolesRouter);
+console.log("app.use('/roles', rolesRouter);");
 app.use('/runs', runsRouter);
+console.log("app.use('/runs', runsRouter);");
 app.use('/scenarios', scenariosRouter);
+console.log("app.use('/scenarios', scenariosRouter);");
 app.use('/search', searchRouter);
+console.log("app.use('/search', searchRouter);");
 app.use('/status', statusRouter);
+console.log("app.use('/status', statusRouter);");
 app.use('/tags', tagsRouter);
+console.log("app.use('/tags', tagsRouter);");
 
 // This handles 404 results from router -- answers all remaining requests
 app.use((req, res, next) => {
@@ -57,6 +73,7 @@ app.use((req, res, next) => {
 });
 // This handles api errors that are thrown -- needs to be after all the endpoints
 app.use(errorHandler);
+console.log("app.use(errorHandler);");
 
 const listener = express();
 listener.use('/api', app);
