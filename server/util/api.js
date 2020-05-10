@@ -29,6 +29,7 @@ exports.asyncMiddleware = middle => {
             try {
                 await middle(req, res, next);
             } catch (error) {
+                console.log("asyncMiddlewareWrapper: ", error);
                 next(error);
             }
         };
@@ -45,12 +46,14 @@ exports.asyncMiddleware = middle => {
             try {
                 await middle(error, req, res, next);
             } catch (error) {
+                console.log("asyncErrorHandlingMiddlewareWrapper: ", error);
                 next(error);
             }
         };
     } else {
-        throw new Error(
-            `Unknown length of function parameters - needs (req, res), (req, res, next) or (error, req, res, next) -- got: ${middle}`
-        );
+        const message = new Error(
+            `Unknown length of function parameters - needs (req, res), (req, res, next) or (error, req, res, next) -- got: ${middle}`);
+        console.log(message);
+        throw new Error(message);
     }
 };
