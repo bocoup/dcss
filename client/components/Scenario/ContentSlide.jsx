@@ -38,11 +38,11 @@ class ContentSlide extends React.Component {
   }
 
   onSkip(event, { name }) {
-    const { onClickNext, onResponseChange, slide } = this.props;
+    const { onNextClick, onResponseChange, slide } = this.props;
     const isSkip = true;
     const value = '';
 
-    if (!this.props.run) {
+    if (!this.props.run || (this.props.run && !this.props.run.id)) {
       // TODO: implement some kind of feedback to
       // make previewer aware that Preview mode
       // does not function like Run mode.
@@ -66,7 +66,7 @@ class ContentSlide extends React.Component {
       });
     }
 
-    onClickNext();
+    onNextClick();
   }
 
   onInterceptResponseChange(event, data) {
@@ -117,7 +117,7 @@ class ContentSlide extends React.Component {
 
   render() {
     const { pending, required, skipButton, skipOrKeep } = this.state;
-    const { isLastSlide, onClickNext, onClickBack, run, slide } = this.props;
+    const { isLastSlide, onNextClick, onBackClick, run, slide } = this.props;
     const { onInterceptResponseChange, onSkip } = this;
     const cardClass = run ? 'scenario__card--run' : 'scenario__card';
     const runOnly = run ? { run } : {};
@@ -137,7 +137,7 @@ class ContentSlide extends React.Component {
     const content = pending.length
       ? awaitingRequiredPrompts
       : submitNextOrFinish;
-    const onClick = pending.length ? () => {} : onClickNext;
+    const onClick = pending.length ? () => {} : onNextClick;
 
     const fwdButtonProps = {
       color,
@@ -183,7 +183,7 @@ class ContentSlide extends React.Component {
               <Button
                 floated="left"
                 color="grey"
-                onClick={onClickBack}
+                onClick={onBackClick}
                 content={'Back'}
               />
             }
@@ -221,8 +221,8 @@ ContentSlide.propTypes = {
   slide: PropTypes.object,
   isLastSlide: PropTypes.bool,
   onResponseChange: PropTypes.func,
-  onClickBack: PropTypes.func,
-  onClickNext: PropTypes.func
+  onBackClick: PropTypes.func,
+  onNextClick: PropTypes.func
 };
 
 function mapStateToProps(state) {
