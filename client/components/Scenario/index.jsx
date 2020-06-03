@@ -15,11 +15,18 @@ class Scenario extends Component {
   constructor(props) {
     super(props);
 
+    // Used in Run mode
     const activeRunSlideIndex =
       Number(this.props.match.params.activeRunSlideIndex) || 0;
 
-    const { baseurl, history, scenarioId, location } = this.props;
-    const activeSlideIndex = activeRunSlideIndex - 1;
+    // Used in Editor preview mode
+    const {
+      activeSlideIndex,
+      baseurl,
+      history,
+      scenarioId,
+      location
+    } = this.props;
     const isReady = false;
 
     this.state = {
@@ -62,17 +69,11 @@ class Scenario extends Component {
           const activeRunSlideIndex = this.state.activeRunSlideIndex - 1;
           const pathToSlide = `${baseurl}/slide/${activeRunSlideIndex}`;
 
-          this.setState(
-            {
-              activeRunSlideIndex,
-              activeSlideIndex: activeRunSlideIndex - 1
-            },
-            () => {
-              if (location.pathname !== pathToSlide) {
-                history.push(pathToSlide);
-              }
+          this.setState({ activeRunSlideIndex }, () => {
+            if (location.pathname !== pathToSlide) {
+              history.push(pathToSlide);
             }
-          );
+          });
         };
       case 'next':
       case 'finish':
@@ -83,17 +84,11 @@ class Scenario extends Component {
           const activeRunSlideIndex = this.state.activeRunSlideIndex + 1;
           const pathToSlide = `${baseurl}/slide/${activeRunSlideIndex}`;
 
-          this.setState(
-            {
-              activeRunSlideIndex,
-              activeSlideIndex: activeRunSlideIndex + 1
-            },
-            () => {
-              if (location.pathname !== pathToSlide) {
-                history.push(pathToSlide);
-              }
+          this.setState({ activeRunSlideIndex }, () => {
+            if (location.pathname !== pathToSlide) {
+              history.push(pathToSlide);
             }
-          );
+          });
         };
       default:
         return null;
@@ -258,7 +253,6 @@ Scenario.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       activeRunSlideIndex: PropTypes.node,
-      activeSlideIndex: PropTypes.node,
       id: PropTypes.node
     }).isRequired
   }),
