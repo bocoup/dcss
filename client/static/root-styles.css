@@ -213,3 +213,11 @@ button {
   height: 100%;
   background-color: var(--color-gray);
 }
+
+.grid__sidebar {
+  padding-top: 0 !important;
+}
+
+.grid__header {
+  margin-bottom: 1rem;
+}
