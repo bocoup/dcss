@@ -221,3 +221,11 @@ button {
 .grid__header {
   margin-bottom: 1rem;
 }
+
+.grid__menu {
+  margin-bottom: 2rem;
+}
+
+.grid__menu-search {
+  width: 100%;
+}

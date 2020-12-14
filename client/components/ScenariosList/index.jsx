@@ -422,16 +422,14 @@ class ScenariosList extends Component {
     ) : null;
 
     const menuItemScenarioSearch = (
-      <Menu.Item.Tabbable>
-        <Input
-          label="Search scenarios"
-          className="sl__menu-search"
-          icon="search"
-          size="big"
-          defaultValue={search || ''}
-          onChange={onSearchChange}
-        />
-      </Menu.Item.Tabbable>
+      <Input
+        label="Search scenarios"
+        className="grid__menu-search"
+        icon="search"
+        size="big"
+        defaultValue={search || ''}
+        onChange={onSearchChange}
+      />
     );
 
     const menuItemScenarioLabels = (
@@ -442,7 +440,7 @@ class ScenariosList extends Component {
 
     const scenarioSearchTools = [
       <Menu.Menu
-        className="sl__menu"
+        className="grid__menu"
         key="menu-item-scenario-search"
         position="right"
       >
